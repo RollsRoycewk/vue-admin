@@ -24,3 +24,15 @@
       export {default as xxx} from './test'
       export {yyy, zzz} from './test'
 */
+
+/* 默认导出,只能有一个 */
+const a = 1;
+// const b = 2;
+export default a;
+// export default b
+
+/* 分别导出,可以有多个 */
+export const c = 4;
+export const d = 5;
+
+/* 统一暴露 */
