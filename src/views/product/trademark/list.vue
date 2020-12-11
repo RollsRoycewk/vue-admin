@@ -4,17 +4,17 @@
     <el-button type="primary" icon="el-icon-plus">添加</el-button>
     <!-- 表格 -->
     <el-table
-      :data="tableData"
+      :data="trademarkDataList"
       border
       style="width: 100%"
       class="trademark-table"
     >
-      <el-table-column prop="date" label="序号" width="80" align="center">
+      <el-table-column type="index" label="序号" width="80" align="center">
       </el-table-column>
-      <el-table-column prop="name" label="品牌名称"> </el-table-column>
-      <el-table-column prop="address" label="品牌LOGO">
+      <el-table-column prop="tmName" label="品牌名称"> </el-table-column>
+      <el-table-column label="品牌LOGO">
         <template slot-scope="scope">
-          <img :src="scope.row.address" class="trademark-image" />
+          <img :src="scope.row.logoUrl" class="trademark-image" />
         </template>
       </el-table-column>
       <el-table-column prop="address" label="操作">
@@ -53,15 +53,23 @@ export default {
   name: "TrademarkList",
   data() {
     return {
-      tableData: [
-        {
-          date: "1",
-          name: "8818",
-          address:
-            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1607667133407&di=2cd1465298e3532cbb03df3f0c949fbb&imgtype=0&src=http%3A%2F%2Fa4.att.hudong.com%2F27%2F67%2F01300000921826141299672233506.jpg",
-        },
-      ],
+      trademarkDataList: [],
     };
+  },
+  async mounted() {
+    try {
+      const result = await this.$API.trademark.getPageList(1, 3);
+      // {code: 200, message: "成功", data: {…}, ok: true}
+      if (result.code === 200) {
+        this.$message.success("获取品牌分页列表数据成功");
+        // 获取到数据代理到data中
+        this.trademarkDataList = result.data.records;
+      } else {
+        this.$message.error("获取品牌分页列表数据失败");
+      }
+    } catch (error) {
+      this.$message.error(error);
+    }
   },
 };
 </script>
