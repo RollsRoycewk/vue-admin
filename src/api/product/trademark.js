@@ -20,5 +20,13 @@ export default {
       method: "POST",
       data
     });
+  },
+
+  /* 删除品牌数据 */
+  deltePageList(id) {
+    return request({
+      url: `${api_name}/remove/${id}`,
+      method: "DELETE"
+    });
   }
 };

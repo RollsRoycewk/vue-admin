@@ -23,7 +23,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="address" label="操作">
-        <template>
+        <template slot-scope="scope">
           <el-button
             type="warning"
             class="el-button el-button--warning el-button--mini"
@@ -34,6 +34,7 @@
           <el-button
             type="danger"
             class="el-button el-button--warning el-button--mini"
+            @click="deleteData(scope.row.id)"
           >
             <i class="el-icon-delete"></i>
             <span>删除</span>
@@ -198,6 +199,31 @@ export default {
           return false;
         }
       });
+    },
+    /* 删除数据 */
+    async deleteData(id) {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(async () => {
+          const res = await this.$API.trademark.deltePageList(id);
+          if (res.ok) {
+            // 请求加载数据
+            this.getPageList(this.current, this.size);
+            this.$message({
+              type: "success",
+              message: "删除成功!",
+            });
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
     },
   },
 };
