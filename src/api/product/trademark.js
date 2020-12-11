@@ -11,5 +11,14 @@ export default {
       url: `${api_name}/${page}/${limit}`,
       method: "GET"
     });
+  },
+
+  /* 添加品牌数据 */
+  addPageList(data) {
+    return request({
+      url: `${api_name}/save`,
+      method: "POST",
+      data
+    });
   }
 };

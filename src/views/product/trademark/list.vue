@@ -54,9 +54,6 @@
     </el-pagination>
 
     <!-- 添加图片 -->
-    <el-button type="text" @click="dialogFormVisible = true"
-      >打开嵌套表单的 Dialog</el-button
-    >
 
     <el-dialog title="添加品牌" :visible.sync="dialogFormVisible">
       <el-form
@@ -66,14 +63,17 @@
         label-width="100px"
       >
         <!-- 需要效验 brand -->
-        <el-form-item label="品牌名称" prop="brand">
-          <el-input autocomplete="off" v-model="trademarkForm.brand"></el-input>
+        <el-form-item label="品牌名称" prop="tmName">
+          <el-input
+            autocomplete="off"
+            v-model="trademarkForm.tmName"
+          ></el-input>
         </el-form-item>
         <!-- 需要效验logoUrl -->
         <el-form-item label="品牌LOGO" prop="logoUrl">
           <el-upload
             class="avatar-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            :action="`${$BASE_API}/admin/product/fileUpload`"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
@@ -89,8 +89,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false"
+        <el-button>取 消</el-button>
+        <el-button type="primary" @click="submitInfo('trademarkForm')"
           >确 定</el-button
         >
       </div>
@@ -107,7 +107,7 @@ export default {
       total: 0, //总数
       size: 3, // 每页显示数量
       current: 1, // 当前页数
-      // Dialog对话框
+      // Dialog对话框显示隐藏
       dialogFormVisible: false,
       // 表单数据
       trademarkForm: {
@@ -117,8 +117,10 @@ export default {
       },
       // 效验规则
       ruleForm: {
-        brand: [{ required: true, message: "请输入品牌名称", trigger: "blur" }],
-        logoUrl: [{ required: true, message: "请上传品牌LOGO" }],
+        tmName: [
+          { required: true, message: "请输入品牌名称", trigger: "blur" },
+        ],
+        logoUrl: [{ required: true, message: "请上传品牌LOGO啊" }],
       },
     };
   },
@@ -152,26 +154,50 @@ export default {
       this.size = size;
       this.getPageList(this.current, this.size);
     },
-    /* 上传图片 */
     handleCurrentChange(current) {
       // 当前点击的页数
       this.current = current;
       this.getPageList(this.current, this.size);
     },
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
+    /* 上传图片 */
+    handleAvatarSuccess(res) {
+      this.trademarkForm.logoUrl = res.data;
     },
     beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
+      const imgType = ["image/jpg", "image/png", "image/jpeg"];
+      const isJPG = imgType.indexOf(file.type) > -1;
+      const isLt50kb = file.size / 1024 < 50;
 
       if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
+        this.$message.error("上传品牌LOGO只能是 JPG 或 PNG 格式!");
       }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
+      if (!isLt50kb) {
+        this.$message.error("上传品牌LOGO大小不能超过 50 kb!");
       }
-      return isJPG && isLt2M;
+      return isJPG && isLt50kb;
+    },
+    /* 提交图片处理 */
+    submitInfo(trademarkForm) {
+      this.$refs[trademarkForm].validate(async (valid) => {
+        if (valid) {
+          const result = await this.$API.trademark.addPageList(
+            this.trademarkForm
+          );
+          if (result.code === 200) {
+            this.$message.success("数据添加成功");
+            // 隐藏对话框
+            this.dialogFormVisible = false;
+            // 清空数据
+            this.trademarkForm.tmName = "";
+            this.trademarkForm.logoUrl = "";
+            // 请求加载数据
+            this.getPageList(this.current, this.size);
+          }
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
   },
 };
