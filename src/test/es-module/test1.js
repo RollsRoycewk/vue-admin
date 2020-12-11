@@ -36,3 +36,6 @@ export const c = 4;
 export const d = 5;
 
 /* 统一暴露 */
+const e = 6;
+const f = 7;
+export { e, f };

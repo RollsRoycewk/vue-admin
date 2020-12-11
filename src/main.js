@@ -21,6 +21,11 @@ import "./plugins/elements";
 // import * as result from "./test/es-module/test1";
 // console.log(result);
 
+// import { e, f } from "./test/es-module/test1";
+// console.log(e, f);
+// import * as result from "./test/es-module/test1";
+// console.log(result);
+
 // 引入全局样式
 import "@/styles/index.scss";
 
