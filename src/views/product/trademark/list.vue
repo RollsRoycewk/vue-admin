@@ -1,7 +1,12 @@
 <template>
   <div>
     <!-- 添加按钮 -->
-    <el-button type="primary" icon="el-icon-plus">添加</el-button>
+    <el-button
+      type="primary"
+      icon="el-icon-plus"
+      @click="dialogFormVisible = true"
+      >添加</el-button
+    >
     <!-- 表格 -->
     <el-table
       :data="trademarkDataList"
@@ -47,6 +52,37 @@
       :total="total"
     >
     </el-pagination>
+
+    <!-- 添加图片 -->
+    <el-button type="text" @click="dialogFormVisible = true"
+      >打开嵌套表单的 Dialog</el-button
+    >
+
+    <el-dialog title="添加品牌" :visible.sync="dialogFormVisible">
+      <el-form :model="form">
+        <el-form-item label="品牌名称" :label-width="formLabelWidth">
+          <el-input v-model="form.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="活动区域" :label-width="formLabelWidth">
+          <el-upload
+            class="avatar-uploader"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+          >
+            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false"
+          >确 定</el-button
+        >
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -59,6 +95,20 @@ export default {
       total: 0, //总数
       size: 3, // 每页显示数量
       current: 1, // 当前页数
+      dialogTableVisible: false,
+      dialogFormVisible: false,
+      form: {
+        name: "",
+        region: "",
+        date1: "",
+        date2: "",
+        delivery: false,
+        type: [],
+        resource: "",
+        desc: "",
+      },
+      formLabelWidth: "120px",
+      imageUrl: "",
     };
   },
   mounted() {
@@ -91,22 +141,62 @@ export default {
       this.size = size;
       this.getPageList(this.current, this.size);
     },
+    /* 上传图片 */
     handleCurrentChange(current) {
       // 当前点击的页数
       this.current = current;
       this.getPageList(this.current, this.size);
     },
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
+    },
   },
 };
 </script>
 
-<style lang="sass" scoped>
->>>.trademark-table
+<style lang="sass" >
+.trademark-table
   margin: 20px 0
->>>.trademark-image
+.trademark-image
   width: 100px
->>>.trademark-pagination
+.trademark-pagination
   text-align: right
->>>.el-pagination__sizes
+.el-pagination__sizes
   margin-left: 250px
+
+.avatar-uploader .el-upload
+  border: 1px dashed #d9d9d9
+  border-radius: 6px
+  cursor: pointer
+  position: relative
+  overflow: hidden
+
+  :hover
+  &
+    border-color: #409EFF
+
+  .avatar-uploader-icon
+    font-size: 28px
+    color: #8c939d
+    width: 178px
+    height: 178px
+    line-height: 178px
+    text-align: center
+
+  .avatar
+    width: 178px
+    height: 178px
+    display: block
 </style>
