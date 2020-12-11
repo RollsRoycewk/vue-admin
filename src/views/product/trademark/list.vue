@@ -100,13 +100,13 @@ export default {
 };
 </script>
 
-<style lang="sass">
-.trademark-table
+<style lang="sass" scoped>
+>>>.trademark-table
   margin: 20px 0
-.trademark-image
+>>>.trademark-image
   width: 100px
-.trademark-pagination
+>>>.trademark-pagination
   text-align: right
-.el-pagination__sizes
+>>>.el-pagination__sizes
   margin-left: 250px
 </style>
