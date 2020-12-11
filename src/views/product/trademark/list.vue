@@ -59,11 +59,18 @@
     >
 
     <el-dialog title="添加品牌" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
-        <el-form-item label="品牌名称" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
+      <el-form
+        :model="trademarkForm"
+        ref="trademarkForm"
+        :rules="ruleForm"
+        label-width="100px"
+      >
+        <!-- 需要效验 brand -->
+        <el-form-item label="品牌名称" prop="brand">
+          <el-input autocomplete="off" v-model="trademarkForm.brand"></el-input>
         </el-form-item>
-        <el-form-item label="活动区域" :label-width="formLabelWidth">
+        <!-- 需要效验logoUrl -->
+        <el-form-item label="品牌LOGO" prop="logoUrl">
           <el-upload
             class="avatar-uploader"
             action="https://jsonplaceholder.typicode.com/posts/"
@@ -71,9 +78,14 @@
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
           >
-            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+            <img
+              v-if="trademarkForm.logoUrl"
+              :src="trademarkForm.logoUrl"
+              class="avatar"
+            />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
+          <span>只能上传jpg/png文件，且不超过50kb</span>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -95,20 +107,19 @@ export default {
       total: 0, //总数
       size: 3, // 每页显示数量
       current: 1, // 当前页数
-      dialogTableVisible: false,
+      // Dialog对话框
       dialogFormVisible: false,
-      form: {
-        name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: "",
+      // 表单数据
+      trademarkForm: {
+        // 表单数据
+        tmName: "",
+        logoUrl: "",
       },
-      formLabelWidth: "120px",
-      imageUrl: "",
+      // 效验规则
+      ruleForm: {
+        brand: [{ required: true, message: "请输入品牌名称", trigger: "blur" }],
+        logoUrl: [{ required: true, message: "请上传品牌LOGO" }],
+      },
     };
   },
   mounted() {
