@@ -38,11 +38,13 @@
     </el-table>
     <!-- 分页器 -->
     <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
       class="trademark-pagination"
       :page-sizes="[3, 5, 10, 15]"
-      :page-size="100"
+      :page-size="size"
       layout="  prev, pager, next, jumper,sizes,total"
-      :total="400"
+      :total="total"
     >
     </el-pagination>
   </div>
@@ -54,22 +56,46 @@ export default {
   data() {
     return {
       trademarkDataList: [],
+      total: 0, //总数
+      size: 3, // 每页显示数量
+      current: 1, // 当前页数
     };
   },
-  async mounted() {
-    try {
-      const result = await this.$API.trademark.getPageList(1, 3);
-      // {code: 200, message: "成功", data: {…}, ok: true}
-      if (result.code === 200) {
-        this.$message.success("获取品牌分页列表数据成功");
-        // 获取到数据代理到data中
-        this.trademarkDataList = result.data.records;
-      } else {
-        this.$message.error("获取品牌分页列表数据失败");
+  mounted() {
+    this.getPageList(this.current, this.size);
+  },
+  methods: {
+    /* 公共发送请求 */
+    async getPageList(page, limit) {
+      try {
+        const result = await this.$API.trademark.getPageList(page, limit);
+        // {code: 200, message: "成功", data: {…}, ok: true}
+        if (result.code === 200) {
+          this.$message.success("获取品牌分页列表数据成功");
+          // 获取到数据代理到data中
+          this.trademarkDataList = result.data.records;
+          // 总数
+          this.total = result.data.total;
+          // 每页显示数量
+          this.size = result.data.size;
+        } else {
+          this.$message.error("获取品牌分页列表数据失败");
+        }
+      } catch (error) {
+        this.$message.error(error);
       }
-    } catch (error) {
-      this.$message.error(error);
-    }
+    },
+    /* 分页器相关 */
+    handleSizeChange(size) {
+      // 选择的每页显示数量
+      this.size = size;
+      this.getPageList(this.current, this.size);
+    },
+    handleCurrentChange(current) {
+      // 当前点击的页数
+      this.current = current;
+      this.getPageList(this.current, this.size);
+    },
   },
 };
 </script>
