@@ -28,5 +28,13 @@ export default {
       url: `${api_name}/remove/${id}`,
       method: "DELETE"
     });
+  },
+  /* 更新数据 */
+  updataPageList(data) {
+    return request({
+      url: `${api_name}/update`,
+      method: "PUT",
+      data
+    });
   }
 };

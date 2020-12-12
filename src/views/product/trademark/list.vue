@@ -1,10 +1,7 @@
 <template>
   <div>
     <!-- 添加按钮 -->
-    <el-button
-      type="primary"
-      icon="el-icon-plus"
-      @click="dialogFormVisible = true"
+    <el-button type="primary" icon="el-icon-plus" @click="add()"
       >添加</el-button
     >
     <!-- 表格 -->
@@ -27,6 +24,7 @@
           <el-button
             type="warning"
             class="el-button el-button--warning el-button--mini"
+            @click="updata(scope)"
           >
             <i class="el-icon-edit"></i>
             <span>修改</span>
@@ -56,7 +54,10 @@
 
     <!-- 添加图片 -->
 
-    <el-dialog title="添加品牌" :visible.sync="dialogFormVisible">
+    <el-dialog
+      :title="`${trademarkForm.id ? '修改' : '添加'}品牌`"
+      :visible.sync="dialogFormVisible"
+    >
       <el-form
         :model="trademarkForm"
         ref="trademarkForm"
@@ -181,11 +182,35 @@ export default {
     submitInfo(trademarkForm) {
       this.$refs[trademarkForm].validate(async (valid) => {
         if (valid) {
-          const result = await this.$API.trademark.addPageList(
-            this.trademarkForm
-          );
+          /* 判断是添加还是更新 */
+          const { trademarkForm } = this;
+          let isUpdata = !!trademarkForm.id;
+
+          if (isUpdata) {
+            const tm = this.trademarkDataList.find(
+              (trademark) => trademark.id === trademarkForm.id
+            );
+
+            if (
+              tm.tmName === trademarkForm.tmName &&
+              tm.logoUrl === trademarkForm.logoUrl
+            ) {
+              this.$message.warning("客官,您的数据未进行修改哦");
+              return;
+            }
+          }
+
+          let result;
+          if (isUpdata) {
+            result = await this.$API.trademark.updataPageList(trademarkForm);
+          } else {
+            result = await this.$API.trademark.addPageList(trademarkForm);
+          }
+          // const result = await this.$API.trademark.addPageList(
+          //   this.trademarkForm
+          // );
           if (result.code === 200) {
-            this.$message.success("数据添加成功");
+            this.$message.success(`${isUpdata ? "修改" : "添加"}品牌数据成功`);
             // 隐藏对话框
             this.dialogFormVisible = false;
             // 清空数据
@@ -224,6 +249,18 @@ export default {
             message: "已取消删除",
           });
         });
+    },
+    /* 修改数据 */
+    updata(scope) {
+      // 让其显示添加修改框
+      this.dialogFormVisible = true;
+      // this.trademarkForm = scope.row; // row代表这一列的数据 id logoUrl tmName
+      this.trademarkForm = { ...scope.row };
+    },
+    add() {
+      // 点击添加的时候要让数据为空,dialog显示
+      this.dialogFormVisible = true;
+      this.trademarkForm = {};
     },
   },
 };
