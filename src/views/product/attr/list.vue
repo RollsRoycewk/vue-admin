@@ -83,7 +83,7 @@
             <!--  直接给对象添加新属性不是响应式数据, 通过this.$set添加的属性才是响应式 -->
             <span
               v-else
-              @click="$set(row, 'edit', true)"
+              @click="edit(row)"
               style="display: block; width: 100%"
               >{{ row.valueName }}</span
             >
@@ -124,6 +124,14 @@ export default {
     // 点击更新属性
     upAttribute(attribute) {
       this.attributeData = attribute;
+    },
+    // edit,解决input聚焦问题
+    edit(row) {
+      // 设置属性,让其确认显示哪个
+      this.$set(row, "edit", true);
+      this.$nextTick(() => {
+        this.$refs.attrInput.focus();
+      });
     },
   },
   components: {
