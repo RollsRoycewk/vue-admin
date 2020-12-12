@@ -260,7 +260,12 @@ export default {
     add() {
       // 点击添加的时候要让数据为空,dialog显示
       this.dialogFormVisible = true;
-      this.trademarkForm = {};
+      // this.trademarkForm = {}; 解决bug
+
+      this.trademarkForm = {
+        tmName: "",
+        logoUrl: "",
+      };
     },
   },
 };
