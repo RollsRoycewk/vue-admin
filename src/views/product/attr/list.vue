@@ -56,7 +56,7 @@
         </el-form-item>
       </el-form>
       <!-- 按钮 -->
-      <el-button type="primary" disabled>
+      <el-button type="primary" @click="addAttribute">
         <i class="el-icon-plus"></i>
         <span>添加属性值</span>
       </el-button>
@@ -130,6 +130,13 @@ export default {
     edit(row) {
       // 设置属性,让其确认显示哪个
       this.$set(row, "edit", true);
+      this.$nextTick(() => {
+        this.$refs.attrInput.focus();
+      });
+    },
+    // 添加属性
+    addAttribute() {
+      this.attributeData.attrValueList.push({ edit: true });
       this.$nextTick(() => {
         this.$refs.attrInput.focus();
       });
