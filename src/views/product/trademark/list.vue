@@ -4,6 +4,8 @@
     <el-button type="primary" icon="el-icon-plus" @click="add()"
       >添加</el-button
     >
+    <!-- 自动添加 -->
+    <el-button type="danger" plain @click="autoAdd()">自动添加</el-button>
     <!-- 表格 -->
     <el-table
       v-loading="loading"
@@ -46,7 +48,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       class="trademark-pagination"
-      :page-sizes="[3, 5, 10, 15]"
+      :page-sizes="[3, 5, 10, 15, 60]"
       :page-size="size"
       layout="  prev, pager, next, jumper,sizes,total"
       :total="total"
@@ -142,6 +144,22 @@ export default {
         this.$message.success("获取品牌分页列表数据成功");
         // 获取到数据代理到data中
         this.trademarkDataList = result.data.records;
+
+        // 删除,搞破坏
+        /*         this.trademarkDataList.forEach(async (item, index) => {
+          if (index > 10) {
+            const res = await this.$API.trademark.deltePageList(item.id);
+            if (res.ok) {
+              // 请求加载数据
+              this.getPageList(this.current, this.size);
+              this.$message({
+                type: "success",
+                message: "删除成功!",
+              });
+            }
+          }
+        });
+ */
         // 总数
         this.total = result.data.total;
         // 每页显示数量
@@ -271,6 +289,25 @@ export default {
         tmName: "",
         logoUrl: "",
       };
+    },
+    /* 自动添加,请勿操作 */
+    async autoAdd() {
+      for (let index = 0; index < 50; index++) {
+        const result = await this.$API.trademark.addPageList({
+          tmName: "null",
+          logoUrl:
+            "http://182.92.128.115:8080/group1/M00/00/A1/rBFUDF_UU0mATJKbAACr2cd-Tmw55.jpeg",
+        });
+
+        if (result.code === 200) {
+          this.$message.success("添加成功");
+          // 清空数据
+          this.trademarkForm.tmName = "空空空";
+          this.trademarkForm.logoUrl = "";
+          // 请求加载数据
+          this.getPageList(this.current, this.size);
+        }
+      }
     },
   },
 };
