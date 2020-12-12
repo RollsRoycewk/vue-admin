@@ -60,7 +60,7 @@
         <i class="el-icon-plus"></i>
         <span>添加属性值</span>
       </el-button>
-      <!-- 列表信息 -->
+      <!-- 所有属性 -->
       <el-table
         :data="attributeData.attrValueList"
         border
@@ -70,7 +70,14 @@
         </el-table-column>
         <el-table-column label="属性值名称">
           <template v-slot="{ row }">
-            {{ row.valueName }}
+            <!-- 一上来row.edit没有所以不会显示 -->
+            <el-input
+              v-if="row.edit"
+              v-model="row.valueName"
+              placeholder="请输入内容"
+              size="mini"
+            ></el-input>
+            <span v-else>{{ row.valueName }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="address" label="操作">
