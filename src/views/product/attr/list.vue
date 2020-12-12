@@ -91,9 +91,13 @@
           </template>
         </el-table-column>
         <el-table-column prop="address" label="操作">
-          <el-button type="danger" size="mini">
-            <i class="el-icon-delete"></i
-          ></el-button>
+          <template v-slot="{ row }">
+            <el-popconfirm title="这是一段内容确定删除吗？">
+              <el-button type="danger" size="mini" slot="reference">
+                <i class="el-icon-delete"></i
+              ></el-button>
+            </el-popconfirm>
+          </template>
         </el-table-column>
       </el-table>
       <el-button type="primary">保存</el-button>
