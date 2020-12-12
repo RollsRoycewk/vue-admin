@@ -6,6 +6,7 @@
     >
     <!-- 表格 -->
     <el-table
+      v-loading="loading"
       :data="trademarkDataList"
       border
       style="width: 100%"
@@ -124,6 +125,8 @@ export default {
         ],
         logoUrl: [{ required: true, message: "请上传品牌LOGO啊" }],
       },
+      // loding进度显示
+      loading: false,
     };
   },
   mounted() {
@@ -132,23 +135,21 @@ export default {
   methods: {
     /* 公共发送请求 */
     async getPageList(page, limit) {
-      try {
-        const result = await this.$API.trademark.getPageList(page, limit);
-        // {code: 200, message: "成功", data: {…}, ok: true}
-        if (result.code === 200) {
-          this.$message.success("获取品牌分页列表数据成功");
-          // 获取到数据代理到data中
-          this.trademarkDataList = result.data.records;
-          // 总数
-          this.total = result.data.total;
-          // 每页显示数量
-          this.size = result.data.size;
-        } else {
-          this.$message.error("获取品牌分页列表数据失败");
-        }
-      } catch (error) {
-        this.$message.error(error);
+      this.loading = true;
+      const result = await this.$API.trademark.getPageList(page, limit);
+      // {code: 200, message: "成功", data: {…}, ok: true}
+      if (result.code === 200) {
+        this.$message.success("获取品牌分页列表数据成功");
+        // 获取到数据代理到data中
+        this.trademarkDataList = result.data.records;
+        // 总数
+        this.total = result.data.total;
+        // 每页显示数量
+        this.size = result.data.size;
+      } else {
+        this.$message.error("获取品牌分页列表数据失败");
       }
+      this.loading = false;
     },
     /* 分页器相关 */
     handleSizeChange(size) {
