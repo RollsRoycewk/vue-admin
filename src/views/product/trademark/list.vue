@@ -145,21 +145,21 @@ export default {
         // 获取到数据代理到data中
         this.trademarkDataList = result.data.records;
 
-        // 删除,搞破坏
-        /*         this.trademarkDataList.forEach(async (item, index) => {
-          if (index > 10) {
-            const res = await this.$API.trademark.deltePageList(item.id);
-            if (res.ok) {
-              // 请求加载数据
-              this.getPageList(this.current, this.size);
-              this.$message({
-                type: "success",
-                message: "删除成功!",
-              });
-            }
-          }
-        });
- */
+        // // 删除,搞破坏
+        // this.trademarkDataList.forEach(async (item, index) => {
+        //   if (index > 10) {
+        //     const res = await this.$API.trademark.deltePageList(item.id);
+        //     if (res.ok) {
+        //       // 请求加载数据
+        //       this.getPageList(this.current, this.size);
+        //       this.$message({
+        //         type: "success",
+        //         message: "删除成功!",
+        //       });
+        //     }
+        //   }
+        // });
+
         // 总数
         this.total = result.data.total;
         // 每页显示数量

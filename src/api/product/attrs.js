@@ -29,7 +29,7 @@ export default {
     });
   },
   /* 获取所有商品属性 */
-  getCategoryAttrsData(category1Id, category2Id, category3Id) {
+  getCategoryAttrsData({ category1Id, category2Id, category3Id }) {
     return request({
       url: `${api_name}/attrInfoList/${category1Id}/${category2Id}/${category3Id}`,
       method: "GET"

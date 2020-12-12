@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 组件 -->
-    <Category></Category>
+    <Category @allAttrsData="getAttrList"></Category>
     <!-- 信息 -->
     <el-card class="box-card">
       <!-- 按钮 -->
@@ -33,6 +33,11 @@ export default {
     return {
       attrList: [],
     };
+  },
+  methods: {
+    getAttrList(data) {
+      this.attrList = data;
+    },
   },
   components: {
     Category,

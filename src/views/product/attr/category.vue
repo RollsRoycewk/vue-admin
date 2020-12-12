@@ -33,7 +33,11 @@
         </el-select>
       </el-form-item>
       <el-form-item label="三级分类">
-        <el-select v-model="category.category3Id" placeholder="请选择">
+        <el-select
+          v-model="category.category3Id"
+          placeholder="请选择"
+          @change="handleSelectChange3"
+        >
           <!-- 三级分类数据 -->
           <el-option
             :label="c3.name"
@@ -77,13 +81,27 @@ export default {
 
     // 点击二级目录,获取三级目录
     async handleSelectChange2(e) {
-      // console.log(e); 获取的是一级目录的id
       const res = await this.$API.attrs.getCategory3Data(e);
       if (res.ok) {
         this.$message.success("三级分类数据获取成功");
         this.category3List = res.data;
       } else {
         this.$message.error("三级分类数据获取失败");
+      }
+    },
+    // 点击三级目录,发送请求获取属性,emit子组件给父组件传递参数,自定义事件
+    async handleSelectChange3(category3Id) {
+      console.log(category3Id);
+      const category = {
+        ...this.category,
+        category3Id,
+      };
+      const res = await this.$API.attrs.getCategoryAttrsData(category);
+      if (res.ok) {
+        this.$message.success("所有属性获取成功");
+        this.$emit("allAttrsData", res.data);
+      } else {
+        this.$message.error("所有属性获取成功");
       }
     },
   },
