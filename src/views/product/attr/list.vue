@@ -41,6 +41,43 @@
         </el-table-column>
       </el-table>
     </el-card>
+
+    <!-- 属性列表修改页面 -->
+    <el-card class="box-card">
+      <!-- 属性名 -->
+      <el-form :model="attr" inline>
+        <el-form-item label="属性名" prop="attrName">
+          <el-input
+            v-model="attr.attrName"
+            placeholder="请输入属性名"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <!-- 按钮 -->
+      <el-button type="primary" disabled>
+        <i class="el-icon-plus"></i>
+        <span>添加属性值</span>
+      </el-button>
+      <!-- 列表信息 -->
+      <el-table :data="attrList" border style="width: 100%; margin: 20px 0">
+        <el-table-column
+          prop="address"
+          label="序号"
+          width="80px"
+          type="index"
+          align="center"
+        >
+        </el-table-column>
+        <el-table-column prop="address" label="属性值名称"> </el-table-column>
+        <el-table-column prop="address" label="操作">
+          <el-button type="danger" size="mini">
+            <i class="el-icon-delete"></i
+          ></el-button>
+        </el-table-column>
+      </el-table>
+      <el-button type="primary">保存</el-button>
+      <el-button>取消</el-button>
+    </el-card>
   </div>
 </template>
 
@@ -53,6 +90,9 @@ export default {
   data() {
     return {
       attrList: [],
+      attr: {
+        attrName: "",
+      },
     };
   },
   methods: {
