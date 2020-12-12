@@ -91,7 +91,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button>取 消</el-button>
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="submitInfo('trademarkForm')"
           >确 定</el-button
         >
@@ -252,12 +252,16 @@ export default {
     },
     /* 修改数据 */
     updata(scope) {
+      // 主要要清空上次的效验(万一有错误会传过来)
+      this.$refs.trademarkForm && this.$refs.trademarkForm.clearValidate();
       // 让其显示添加修改框
       this.dialogFormVisible = true;
       // this.trademarkForm = scope.row; // row代表这一列的数据 id logoUrl tmName
       this.trademarkForm = { ...scope.row };
     },
     add() {
+      /* 解决bug,移出上一次的效验 */
+      this.$refs.trademarkForm && this.$refs.trademarkForm.clearValidate();
       // 点击添加的时候要让数据为空,dialog显示
       this.dialogFormVisible = true;
       // this.trademarkForm = {}; 解决bug
