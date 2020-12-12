@@ -70,14 +70,23 @@
         </el-table-column>
         <el-table-column label="属性值名称">
           <template v-slot="{ row }">
-            <!-- 一上来row.edit没有所以不会显示 -->
+            <!-- 一上来row.edit没有所以不会显示,失去焦点显示span -->
             <el-input
               v-if="row.edit"
               v-model="row.valueName"
               placeholder="请输入内容"
+              autofocus
+              ref="attrInput"
               size="mini"
+              @blur="row.edit = false"
             ></el-input>
-            <span v-else>{{ row.valueName }}</span>
+            <!--  直接给对象添加新属性不是响应式数据, 通过this.$set添加的属性才是响应式 -->
+            <span
+              v-else
+              @click="$set(row, 'edit', true)"
+              style="display: block; width: 100%"
+              >{{ row.valueName }}</span
+            >
           </template>
         </el-table-column>
         <el-table-column prop="address" label="操作">
