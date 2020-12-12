@@ -91,10 +91,16 @@ export default {
     },
     // 点击三级目录,发送请求获取属性,emit子组件给父组件传递参数,自定义事件
     async handleSelectChange3(category3Id) {
-      console.log(category3Id);
+      // const category = {
+      //   ...this.category,
+      //   category3Id,
+      // };
+
+      // 开发方便,暂定
       const category = {
-        ...this.category,
-        category3Id,
+        category1Id: "11",
+        category2Id: "61",
+        category3Id: "616",
       };
       const res = await this.$API.attrs.getCategoryAttrsData(category);
       if (res.ok) {
@@ -112,6 +118,21 @@ export default {
       this.category1List = res.data;
     } else {
       this.$message.error("一级分类数据获取失败");
+    }
+
+    // 测试使用
+    // 开发方便,暂定
+    const category = {
+      category1Id: "11",
+      category2Id: "61",
+      category3Id: "616",
+    };
+    const res2 = await this.$API.attrs.getCategoryAttrsData(category);
+    if (res.ok) {
+      this.$message.success("所有属性获取成功");
+      this.$emit("allAttrsData", res2.data);
+    } else {
+      this.$message.error("所有属性获取成功");
     }
   },
 };
