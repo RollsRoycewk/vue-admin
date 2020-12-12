@@ -79,6 +79,7 @@
               ref="attrInput"
               size="mini"
               @blur="row.edit = false"
+              @keyup.enter.native="row.edit = false"
             ></el-input>
             <!--  直接给对象添加新属性不是响应式数据, 通过this.$set添加的属性才是响应式 -->
             <span
