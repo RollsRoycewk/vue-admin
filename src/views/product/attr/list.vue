@@ -32,12 +32,14 @@
           </template>
         </el-table-column>
         <el-table-column prop="address" label="操作" width="150px">
-          <el-button type="primary" size="mini"
-            ><i class="el-icon-edit"></i
-          ></el-button>
-          <el-button type="danger" size="mini">
-            <i class="el-icon-delete"></i
-          ></el-button>
+          <template v-slot="{ row }">
+            <el-button type="primary" size="mini" @click="upAttribute(row)"
+              ><i class="el-icon-edit"></i
+            ></el-button>
+            <el-button type="danger" size="mini">
+              <i class="el-icon-delete"></i
+            ></el-button>
+          </template>
         </el-table-column>
       </el-table>
     </el-card>
@@ -45,10 +47,10 @@
     <!-- 属性列表修改页面 -->
     <el-card class="box-card">
       <!-- 属性名 -->
-      <el-form :model="attr" inline>
+      <el-form :model="attributeData" inline>
         <el-form-item label="属性名" prop="attrName">
           <el-input
-            v-model="attr.attrName"
+            v-model="attributeData.attrName"
             placeholder="请输入属性名"
           ></el-input>
         </el-form-item>
@@ -59,16 +61,18 @@
         <span>添加属性值</span>
       </el-button>
       <!-- 列表信息 -->
-      <el-table :data="attrList" border style="width: 100%; margin: 20px 0">
-        <el-table-column
-          prop="address"
-          label="序号"
-          width="80px"
-          type="index"
-          align="center"
-        >
+      <el-table
+        :data="attributeData.attrValueList"
+        border
+        style="width: 100%; margin: 20px 0"
+      >
+        <el-table-column label="序号" width="80px" type="index" align="center">
         </el-table-column>
-        <el-table-column prop="address" label="属性值名称"> </el-table-column>
+        <el-table-column label="属性值名称">
+          <template v-slot="{ row }">
+            {{ row.valueName }}
+          </template>
+        </el-table-column>
         <el-table-column prop="address" label="操作">
           <el-button type="danger" size="mini">
             <i class="el-icon-delete"></i
@@ -90,14 +94,20 @@ export default {
   data() {
     return {
       attrList: [],
-      attr: {
+      // 属性数据
+      attributeData: {
         attrName: "",
+        attrValueList: [],
       },
     };
   },
   methods: {
     getAttrList(data) {
       this.attrList = data;
+    },
+    // 点击更新属性
+    upAttribute(attribute) {
+      this.attributeData = attribute;
     },
   },
   components: {
