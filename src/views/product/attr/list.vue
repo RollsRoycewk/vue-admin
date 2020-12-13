@@ -91,8 +91,11 @@
           </template>
         </el-table-column>
         <el-table-column prop="address" label="操作">
-          <template v-slot="{ row }">
-            <el-popconfirm title="这是一段内容确定删除吗？">
+          <template v-slot="{ row, $index }">
+            <el-popconfirm
+              :title="`确定要删除${row.valueName}吗？`"
+              @onConfirm="delAttribute($index)"
+            >
               <el-button type="danger" size="mini" slot="reference">
                 <i class="el-icon-delete"></i
               ></el-button>
@@ -144,6 +147,10 @@ export default {
       this.$nextTick(() => {
         this.$refs.attrInput.focus();
       });
+    },
+    // 删除属性
+    delAttribute(index) {
+      this.attributeData.attrValueList.splice(index, 1);
     },
   },
   components: {
