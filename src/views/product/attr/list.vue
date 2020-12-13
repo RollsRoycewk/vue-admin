@@ -127,6 +127,8 @@ export default {
   },
   methods: {
     async getAttrList(category) {
+      // 后面更新数以后重新刷新用
+      this.category = category;
       const res = await this.$API.attrs.getCategoryAttrsData(category);
       if (res.ok) {
         this.attrList = res.data;
@@ -172,6 +174,8 @@ export default {
       const result = await this.$API.attrs.getUpdataAttr(this.attributeData);
       if (result.ok) {
         this.$message.success("更新属性完成,重新请求完成");
+        // 如果成功,重新请求数据
+        this.getAttrList(this.category);
       } else {
         this.$message.error("更新属性失败");
       }

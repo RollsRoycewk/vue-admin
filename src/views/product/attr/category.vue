@@ -91,16 +91,9 @@ export default {
     },
     // 点击三级目录,发送请求获取属性,emit子组件给父组件传递参数,自定义事件
     async handleSelectChange3(category3Id) {
-      // const category = {
-      //   ...this.category,
-      //   category3Id,
-      // };
-
-      // 开发方便,暂定
       const category = {
-        category1Id: "11",
-        category2Id: "61",
-        category3Id: "616",
+        ...this.category,
+        category3Id,
       };
       this.$emit("allAttrsData", category);
     },
@@ -113,15 +106,6 @@ export default {
     } else {
       this.$message.error("一级分类数据获取失败");
     }
-
-    // 测试使用
-    // 开发方便,暂定
-    const category = {
-      category1Id: "11",
-      category2Id: "61",
-      category3Id: "616",
-    };
-    this.$emit("allAttrsData", category);
   },
 };
 </script>
