@@ -1,7 +1,11 @@
 <template>
   <div>
     <!-- 组件 -->
-    <Category @allAttrsData="getAttrList" :disabled="!isAttrsShow"></Category>
+    <Category
+      @allAttrsData="getAttrList"
+      :disabled="!isAttrsShow"
+      @clsAttr="clsAttribut"
+    ></Category>
     <!-- 信息 -->
     <el-card class="box-card" v-show="isAttrsShow">
       <!-- 按钮 -->
@@ -184,6 +188,10 @@ export default {
       } else {
         this.$message.error("更新属性失败");
       }
+    },
+    // 清空属性列表
+    clsAttribut() {
+      this.attrList = [];
     },
   },
   components: {
