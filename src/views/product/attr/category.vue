@@ -74,6 +74,12 @@ export default {
     // 点击一级目录,获取二级目录
     async handleSelectChange1(e) {
       // console.log(e); 获取的是一级目录的id
+      /* 点击一级目录,让二级三级目录清空 */
+      this.category2List = [];
+      this.category3List = [];
+      this.category.category2Id = "";
+      this.category.category3Id = "";
+
       const res = await this.$API.attrs.getCategory2Data(e);
       if (res.ok) {
         this.$message.success("二级分类数据获取成功");
@@ -85,6 +91,10 @@ export default {
 
     // 点击二级目录,获取三级目录
     async handleSelectChange2(e) {
+      /* 点击一级目录,让二级三级目录清空 */
+      this.category3List = [];
+      this.category.category3Id = "";
+
       const res = await this.$API.attrs.getCategory3Data(e);
       if (res.ok) {
         this.$message.success("三级分类数据获取成功");
