@@ -69,7 +69,7 @@
         <el-table-column label="序号" width="80px" type="index" align="center">
         </el-table-column>
         <el-table-column label="属性值名称">
-          <template v-slot="{ row }">
+          <template v-slot="{ row, $index }">
             <!-- 一上来row.edit没有所以不会显示,失去焦点显示span -->
             <el-input
               v-if="row.edit"
@@ -78,8 +78,8 @@
               autofocus
               ref="attrInput"
               size="mini"
-              @blur="row.edit = false"
-              @keyup.enter.native="row.edit = false"
+              @blur="editComputed(row, $index)"
+              @keyup.enter.native="editComputed(row, $index)"
             ></el-input>
             <!--  直接给对象添加新属性不是响应式数据, 通过this.$set添加的属性才是响应式 -->
             <span
@@ -151,6 +151,15 @@ export default {
     // 删除属性
     delAttribute(index) {
       this.attributeData.attrValueList.splice(index, 1);
+    },
+    // 如果没有就不添加
+    editComputed(row, index) {
+      console.log(row, index);
+      if (!row.valueName) {
+        this.attributeData.attrValueList.splice(index, 1);
+        return;
+      }
+      row.edit = false;
     },
   },
   components: {
