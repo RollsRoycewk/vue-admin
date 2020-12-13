@@ -7,6 +7,7 @@
           v-model="category.category1Id"
           placeholder="请选择"
           @change="handleSelectChange1"
+          :disabled="disabled"
         >
           <!-- 一级数据展示 -->
           <el-option
@@ -22,6 +23,7 @@
           v-model="category.category2Id"
           placeholder="请选择"
           @change="handleSelectChange2"
+          :disabled="disabled"
         >
           <!-- 二级分类数据 -->
           <el-option
@@ -37,6 +39,7 @@
           v-model="category.category3Id"
           placeholder="请选择"
           @change="handleSelectChange3"
+          :disabled="disabled"
         >
           <!-- 三级分类数据 -->
           <el-option
@@ -54,6 +57,7 @@
 <script>
 export default {
   name: "Category",
+  props: ["disabled"],
   data() {
     return {
       category: {

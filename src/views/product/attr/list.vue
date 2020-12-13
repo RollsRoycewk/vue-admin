@@ -1,9 +1,9 @@
 <template>
   <div>
     <!-- 组件 -->
-    <Category @allAttrsData="getAttrList"></Category>
+    <Category @allAttrsData="getAttrList" :disabled="!isAttrsShow"></Category>
     <!-- 信息 -->
-    <el-card class="box-card">
+    <el-card class="box-card" v-show="isAttrsShow">
       <!-- 按钮 -->
       <el-button type="primary" disabled>
         <i class="el-icon-plus"></i>
@@ -45,7 +45,7 @@
     </el-card>
 
     <!-- 属性列表修改页面 -->
-    <el-card class="box-card">
+    <el-card class="box-card" v-show="!isAttrsShow">
       <!-- 属性名 -->
       <el-form :model="attributeData" inline>
         <el-form-item label="属性名" prop="attrName">
@@ -104,7 +104,7 @@
         </el-table-column>
       </el-table>
       <el-button type="primary" @click="saveSubit">保存</el-button>
-      <el-button>取消</el-button>
+      <el-button @click="isAttrsShow = true">取消</el-button>
     </el-card>
   </div>
 </template>
@@ -117,6 +117,8 @@ export default {
   name: "AttrList",
   data() {
     return {
+      // attrs是否显示
+      isAttrsShow: true,
       attrList: [],
       // 属性数据
       attributeData: {
@@ -141,6 +143,7 @@ export default {
     upAttribute(attribute) {
       //为了防止attr变化时直接修改原数据  深度克隆
       this.attributeData = JSON.parse(JSON.stringify(attribute));
+      this.isAttrsShow = false;
     },
     // edit,解决input聚焦问题
     edit(row) {
@@ -176,6 +179,8 @@ export default {
         this.$message.success("更新属性完成,重新请求完成");
         // 如果成功,重新请求数据
         this.getAttrList(this.category);
+        // 成功以后回到属性页面
+        this.isAttrsShow = true;
       } else {
         this.$message.error("更新属性失败");
       }
