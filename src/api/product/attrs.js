@@ -34,5 +34,14 @@ export default {
       url: `${api_name}/attrInfoList/${category1Id}/${category2Id}/${category3Id}`,
       method: "GET"
     });
+  },
+
+  /* 更新属性 */
+  getUpdataAttr(data) {
+    return request({
+      url: `${api_name}/saveAttrInfo`,
+      method: "POST",
+      data
+    });
   }
 };

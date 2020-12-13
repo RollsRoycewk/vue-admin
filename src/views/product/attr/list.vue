@@ -103,7 +103,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-button type="primary">保存</el-button>
+      <el-button type="primary" @click="saveSubit">保存</el-button>
       <el-button>取消</el-button>
     </el-card>
   </div>
@@ -161,6 +161,15 @@ export default {
         return;
       }
       row.edit = false;
+    },
+    // 提交更新属性值
+    async saveSubit() {
+      const result = await this.$API.attrs.getUpdataAttr(this.attributeData);
+      if (result.ok) {
+        this.$message.success("更新属性完成,重新请求完成");
+      } else {
+        this.$message.error("更新属性失败");
+      }
     },
   },
   components: {
