@@ -126,8 +126,14 @@ export default {
     };
   },
   methods: {
-    getAttrList(data) {
-      this.attrList = data;
+    async getAttrList(category) {
+      const res = await this.$API.attrs.getCategoryAttrsData(category);
+      if (res.ok) {
+        this.attrList = res.data;
+        this.$message.success("所有属性获取成功");
+      } else {
+        this.$message.error("所有属性获取成功");
+      }
     },
     // 点击更新属性
     upAttribute(attribute) {
@@ -155,7 +161,6 @@ export default {
     },
     // 如果没有就不添加
     editComputed(row, index) {
-      console.log(row, index);
       if (!row.valueName) {
         this.attributeData.attrValueList.splice(index, 1);
         return;

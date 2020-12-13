@@ -102,13 +102,7 @@ export default {
         category2Id: "61",
         category3Id: "616",
       };
-      const res = await this.$API.attrs.getCategoryAttrsData(category);
-      if (res.ok) {
-        this.$message.success("所有属性获取成功");
-        this.$emit("allAttrsData", res.data);
-      } else {
-        this.$message.error("所有属性获取成功");
-      }
+      this.$emit("allAttrsData", category);
     },
   },
   async mounted() {
@@ -127,13 +121,7 @@ export default {
       category2Id: "61",
       category3Id: "616",
     };
-    const res2 = await this.$API.attrs.getCategoryAttrsData(category);
-    if (res.ok) {
-      this.$message.success("所有属性获取成功");
-      this.$emit("allAttrsData", res2.data);
-    } else {
-      this.$message.error("所有属性获取成功");
-    }
+    this.$emit("allAttrsData", category);
   },
 };
 </script>
