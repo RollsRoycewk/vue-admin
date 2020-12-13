@@ -131,7 +131,8 @@ export default {
     },
     // 点击更新属性
     upAttribute(attribute) {
-      this.attributeData = attribute;
+      //为了防止attr变化时直接修改原数据  深度克隆
+      this.attributeData = JSON.parse(JSON.stringify(attribute));
     },
     // edit,解决input聚焦问题
     edit(row) {
