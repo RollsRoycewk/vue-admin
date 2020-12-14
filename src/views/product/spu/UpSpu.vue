@@ -43,11 +43,14 @@
       </el-form-item>
       <!-- 销售类型 -->
       <el-form-item label="销售属性">
-        <el-select placeholder="还有三个未选择" v-model="test">
+        <el-select
+          :placeholder="`还有${filterSaleAttr.length}未选择`"
+          v-model="test"
+        >
           <el-option
             :label="spuSale.name"
             :value="spuSale.id"
-            v-for="spuSale in spuSaleAttr"
+            v-for="spuSale in filterSaleAttr"
             :key="spuSale.id"
           ></el-option>
         </el-select>
@@ -69,12 +72,17 @@
             type="index"
           >
           </el-table-column>
-          <el-table-column prop="name" label="属性名" width="150">
+          <el-table-column prop="saleAttrName" label="属性名" width="150">
           </el-table-column>
           <el-table-column prop="address" label="属性值名称列表">
-            <!-- <template v-slot="{ row }">
-              <el-tag v-for=""></el-tag>
-            </template> -->
+            <template v-slot="{ row }">
+              <el-tag
+                style="margin-left: 5px"
+                v-for="ValueList in row.spuSaleAttrValueList"
+                :key="ValueList.id"
+                >{{ ValueList.saleAttrValueName }}</el-tag
+              >
+            </template>
           </el-table-column>
           <el-table-column prop="address" label="操作" width="150">
             <el-button type="danger" size="mini">
@@ -196,6 +204,15 @@ export default {
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+    },
+  },
+  computed: {
+    filterSaleAttr() {
+      return this.baseSaleAttr.filter((sale) => {
+        return !this.spuSaleAttr.find(
+          (item) => item.id === sale.baseSaleAttrId
+        );
+      });
     },
   },
   mounted() {
