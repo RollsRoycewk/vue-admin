@@ -46,9 +46,9 @@ export default {
   },
 
   /* 获取哪一页的数据 */
-  getPageSpu({ category3Id, page, limit }) {
+  getPageSpu({ category3Id, current, size }) {
     return request({
-      url: `${api_name}/${page}/${limit}`,
+      url: `${api_name}/${current}/${size}`,
       method: "GET",
       params: {
         category3Id

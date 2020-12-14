@@ -14,14 +14,15 @@
       <el-table-column prop="address" label="操作"> </el-table-column>
     </el-table>
     <!-- 分页器 -->
-    <!-- @size-change="handleSizeChange"
-    @current-change="handleCurrentChange" -->
+
     <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
       class="trademark-pagination"
       :page-sizes="[3, 5, 10, 15, 60]"
-      :page-size="5"
+      :page-size="size"
       layout="  prev, pager, next, jumper,sizes,total"
-      :total="1"
+      :total="total"
     >
     </el-pagination>
   </el-card>
@@ -30,27 +31,12 @@
 <script>
 export default {
   name: "SpuDataList",
-  methods: {
-    async getPageSpu(page, limit) {
-      const { category3Id } = this.category;
-      const res = await this.$API.spu.getPageSpu({
-        category3Id,
-        page,
-        limit,
-      });
-      console.log(res);
-      if (res.code === 200) {
-        this.$message.success("SPU数据获取完成");
-        this.spuAllData = res.data.records;
-      } else {
-        this.$message.error("SPU数据获取失败");
-      }
-    },
-  },
   data() {
     return {
-      page: 1,
-      limit: 3,
+      // 分页相关
+      current: 1,
+      size: 3,
+      total: 0,
       // spu所有数据
       spuAllData: [],
       category: {
@@ -60,10 +46,40 @@ export default {
       },
     };
   },
+  methods: {
+    async getPageSpuData(current, size) {
+      console.log(current, size);
+      const { category3Id } = this.category;
+      const res = await this.$API.spu.getPageSpu({
+        category3Id,
+        current,
+        size,
+      });
+      console.log(res);
+      if (res.code === 200) {
+        this.$message.success("SPU数据获取完成");
+        this.spuAllData = res.data.records;
+        this.total = res.data.total;
+      } else {
+        this.$message.error("SPU数据获取失败");
+      }
+    },
+    /* 分页器相关 */
+    handleSizeChange(size) {
+      // 选择的每页显示数量
+      this.size = size;
+      this.getPageSpuData(this.current, this.size);
+    },
+    handleCurrentChange(current) {
+      // 当前点击的页数
+      this.current = current;
+      this.getPageSpuData(this.current, this.size);
+    },
+  },
   mounted() {
     this.$bus.$on("allAttrsData", (category) => {
       this.category = category;
-      this.getPageSpu(this.page, this.limit);
+      this.getPageSpuData(this.current, this.size);
     });
   },
 };
