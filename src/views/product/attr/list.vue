@@ -64,7 +64,11 @@
         </el-form-item>
       </el-form>
       <!-- 按钮 -->
-      <el-button type="primary" @click="addAttribute">
+      <el-button
+        type="primary"
+        @click="addAttribute"
+        :disabled="!attributeData.attrName"
+      >
         <i class="el-icon-plus"></i>
         <span>添加属性值</span>
       </el-button>
@@ -111,7 +115,12 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-button type="primary" @click="saveSubit">保存</el-button>
+      <el-button
+        type="primary"
+        @click="saveSubit"
+        :disabled="!attributeData.attrName"
+        >保存</el-button
+      >
       <el-button @click="isAttrsShow = true">取消</el-button>
     </el-card>
   </div>
