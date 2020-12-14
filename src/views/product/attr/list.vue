@@ -1,11 +1,7 @@
 <template>
   <div>
     <!-- 组件 -->
-    <Category
-      @allAttrsData="getAttrList"
-      :disabled="!isAttrsShow"
-      @clsAttr="clsAttribut"
-    ></Category>
+    <Category :disabled="!isAttrsShow"></Category>
     <!-- 信息 -->
     <el-card class="box-card" v-show="isAttrsShow">
       <!-- 按钮 -->
@@ -236,6 +232,16 @@ export default {
   },
   components: {
     Category,
+  },
+  mounted() {
+    this.$bus.$on("allAttrsData", this.getAttrList);
+    this.$bus.$on("clsAttr", this.clsAttribut);
+  },
+
+  beforeDestroy() {
+    //否则每一次都会绑定一个事件
+    this.$bus.$off("allAttrsData", this.getAttrList);
+    this.$bus.$off("clsAttr", this.clsAttribut);
   },
 };
 </script>
