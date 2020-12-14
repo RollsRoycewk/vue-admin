@@ -61,5 +61,13 @@ export default {
       url: `${api_name}/baseTrademark/getTrademarkList`,
       method: "GET"
     });
+  },
+
+  /* 获取当前品牌的图片 */
+  getSpuImageList(spuId) {
+    return request({
+      url: `${api_name}/spuImageList/${spuId}`,
+      method: "GET"
+    });
   }
 };

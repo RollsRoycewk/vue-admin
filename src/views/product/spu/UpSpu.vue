@@ -9,8 +9,12 @@
       <el-form-item label="品牌">
         <!-- 默认图片 -->
         <el-select placeholder="请选择品牌" v-model="supEveryData.tmId">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
+          <el-option
+            :label="trademark.tmName"
+            :value="trademark.id"
+            v-for="trademark in trademarkList"
+            :key="trademark.id"
+          ></el-option>
         </el-select>
       </el-form-item>
       <!-- SPU描述 -->
@@ -22,17 +26,20 @@
         ></el-input>
       </el-form-item>
       <!-- SPU图片 -->
-      <!-- :on-preview="handlePictureCardPreview"
-        :on-remove="handleRemove" 
-        :action="`${$BASE_API}/admin/product/fileUpload`"
-        -->
+
       <el-form-item label="SPU图片">
         <el-upload
-          action="https://jsonplaceholder.typicode.com/posts/"
+          :action="`${$BASE_API}/admin/product/fileUpload`"
           list-type="picture-card"
+          :file-list="spuImageList"
+          :on-preview="handlePictureCardPreview"
+          :on-remove="handleRemove"
         >
           <i class="el-icon-plus"></i>
         </el-upload>
+        <el-dialog :visible.sync="dialogVisible">
+          <img width="100%" :src="dialogImageUrl" alt="" />
+        </el-dialog>
       </el-form-item>
       <!-- 销售类型 -->
       <el-form-item label="销售属性">
@@ -71,6 +78,12 @@ export default {
       test: [],
       // supData的数据
       supEveryData: this.supData,
+      // 所有品牌数据
+      trademarkList: [],
+      // 所有图片数据
+      spuImageList: [],
+      dialogImageUrl: "",
+      dialogVisible: false,
     };
   },
   props: {
@@ -82,7 +95,47 @@ export default {
     /* 获取所有品牌数据 */
     async getTrademarkList() {
       const res = await this.$API.spu.getBaseSaleAttrList();
+      if (res.code === 200) {
+        this.$message.success("所有品牌数据获取成功");
+        this.trademarkList = res.data;
+      } else {
+        this.$message.error("所有品牌数据获取成功");
+      }
+    },
+    /* 获取该品牌的图片 */
+    async getTrademarkList() {
+      const { id } = this.supEveryData;
+      const res = await this.$API.spu.getSpuImageList(id);
       console.log(res);
+      // id: 10146
+      // imgName: "5a6dbbae3533292e.jpg"
+      // imgUrl: "http://182.92.128.115:8080/group1/M00/00/A5/rBFUDF_W1CWAZG5GAAFhlax_7CU420.jpg"
+      // spuId: 2218
+
+      //  [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
+      if (res.code === 200) {
+        this.$message.success("该品牌图片数据获取成功");
+        this.spuImageList = res.data.map((item) => {
+          return {
+            id: item.id,
+            name: item.imgName,
+            url: item.imgUrl,
+          };
+        });
+      } else {
+        this.$message.error("该品牌图片数据获取成功");
+      }
+    },
+    // 处理图片
+    handleRemove(file, fileList) {
+      // console.log(file.id, fileList);
+      this.spuImageList = this.spuImageList.filter(
+        (supimg) => supimg.id !== file.id
+      );
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
     },
   },
   mounted() {
