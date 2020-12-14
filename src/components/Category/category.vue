@@ -111,7 +111,7 @@ export default {
         ...this.category,
         category3Id,
       };
-      this.$emit("allAttrsData", category);
+      this.$bus.$emit("allAttrsData", category);
     },
   },
   async mounted() {

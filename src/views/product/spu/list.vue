@@ -15,7 +15,7 @@ export default {
   name: "SpuList",
   data() {
     return {
-      isShowSpu: false,
+      isShowSpu: true,
     };
   },
   components: {

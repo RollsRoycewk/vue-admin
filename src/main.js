@@ -82,6 +82,10 @@ Vue.prototype.$BASE_API = process.env.VUE_APP_BASE_API;
 Vue.config.productionTip = false;
 
 new Vue({
+  // 添加全局事件总线
+  beforeCreate() {
+    Vue.prototype.$bus = this;
+  },
   el: "#app",
   router,
   store,

@@ -45,11 +45,14 @@ export default {
     });
   },
 
-  /* 获取那一页的数据 */
-  getPageSpu(page, limit) {
+  /* 获取哪一页的数据 */
+  getPageSpu({ category3Id, page, limit }) {
     return request({
       url: `${api_name}/${page}/${limit}`,
-      method: "GET"
+      method: "GET",
+      params: {
+        category3Id
+      }
     });
   }
 };
