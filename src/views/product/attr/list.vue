@@ -9,7 +9,7 @@
     <!-- 信息 -->
     <el-card class="box-card" v-show="isAttrsShow">
       <!-- 按钮 -->
-      <el-button type="primary" disabled>
+      <el-button type="primary" :disabled="!category.category3Id">
         <i class="el-icon-plus"></i>
         <span>添加属性</span>
       </el-button>
@@ -129,6 +129,8 @@ export default {
         attrName: "",
         attrValueList: [],
       },
+      // 分类id
+      category: {},
     };
   },
   methods: {
