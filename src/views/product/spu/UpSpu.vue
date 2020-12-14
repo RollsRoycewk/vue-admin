@@ -84,6 +84,8 @@ export default {
       spuImageList: [],
       dialogImageUrl: "",
       dialogVisible: false,
+      // 所有销售属性
+      baseSaleAttrId: [],
     };
   },
   props: {
@@ -92,6 +94,32 @@ export default {
     },
   },
   methods: {
+    /* 获取所有销售属性 */
+    async getSpuSaleAttrList() {
+      const { id } = this.supEveryData;
+      const res = await this.$API.spu.getSpuSaleAttrList(id);
+      console.log(res);
+      //data: Array(3)
+      // 0:
+      // baseSaleAttrId: 1
+      // id: 7436
+      // saleAttrName: "选择颜色"
+      // spuId: 2218
+      // spuSaleAttrValueList: Array(2)
+      // 0:
+      // baseSaleAttrId: 1
+      // id: 4617
+      // isChecked: null
+      // saleAttrName: "选择颜色"
+      // saleAttrValueName: "白色"
+      // spuId: 2218
+      if (res.code === 200) {
+        this.$message.success("所有品牌销售数据获取成功");
+        this.baseSaleAttrId = res.data;
+      } else {
+        this.$message.error("所有品牌销售数据获取成功");
+      }
+    },
     /* 获取所有品牌数据 */
     async getTrademarkList() {
       const res = await this.$API.spu.getBaseSaleAttrList();
@@ -103,10 +131,9 @@ export default {
       }
     },
     /* 获取该品牌的图片 */
-    async getTrademarkList() {
+    async getSpuImageList() {
       const { id } = this.supEveryData;
       const res = await this.$API.spu.getSpuImageList(id);
-      console.log(res);
       // id: 10146
       // imgName: "5a6dbbae3533292e.jpg"
       // imgUrl: "http://182.92.128.115:8080/group1/M00/00/A5/rBFUDF_W1CWAZG5GAAFhlax_7CU420.jpg"
@@ -140,6 +167,8 @@ export default {
   },
   mounted() {
     this.getTrademarkList();
+    this.getSpuImageList();
+    this.getSpuSaleAttrList();
   },
 };
 </script>

@@ -69,5 +69,13 @@ export default {
       url: `${api_name}/spuImageList/${spuId}`,
       method: "GET"
     });
+  },
+
+  /* 获取当前品牌的销售属性 */
+  getSpuSaleAttrList(spuId) {
+    return request({
+      url: `${api_name}/spuSaleAttrList/${spuId}`,
+      method: "GET"
+    });
   }
 };
