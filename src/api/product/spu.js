@@ -77,5 +77,13 @@ export default {
       url: `${api_name}/spuSaleAttrList/${spuId}`,
       method: "GET"
     });
+  },
+
+  /* 获取所有品牌属性 */
+  getBaseSaleAttrList() {
+    return request({
+      url: `${api_name}/baseSaleAttrList`,
+      method: "GET"
+    });
   }
 };

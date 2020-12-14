@@ -44,22 +44,42 @@
       <!-- 销售类型 -->
       <el-form-item label="销售属性">
         <el-select placeholder="还有三个未选择" v-model="test">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
+          <el-option
+            :label="spuSale.name"
+            :value="spuSale.id"
+            v-for="spuSale in spuSaleAttr"
+            :key="spuSale.id"
+          ></el-option>
         </el-select>
         <el-button type="primary">
           <i class="el-icon-plus"></i>
           添加销售类型
         </el-button>
         <!-- 销售类型列表 -->
-        <el-table border style="width: 100%; margin: 20px 0">
-          <el-table-column prop="date" label="序号" width="80" align="center">
+        <el-table
+          border
+          style="width: 100%; margin: 20px 0"
+          :data="baseSaleAttr"
+        >
+          <el-table-column
+            prop="date"
+            label="序号"
+            width="80"
+            align="center"
+            type="index"
+          >
           </el-table-column>
           <el-table-column prop="name" label="属性名" width="150">
           </el-table-column>
           <el-table-column prop="address" label="属性值名称列表">
+            <!-- <template v-slot="{ row }">
+              <el-tag v-for=""></el-tag>
+            </template> -->
           </el-table-column>
           <el-table-column prop="address" label="操作" width="150">
+            <el-button type="danger" size="mini">
+              <i class="el-icon-delete"></i>
+            </el-button>
           </el-table-column>
         </el-table>
         <!-- 保存取消按钮 -->
@@ -84,8 +104,10 @@ export default {
       spuImageList: [],
       dialogImageUrl: "",
       dialogVisible: false,
-      // 所有销售属性
-      baseSaleAttrId: [],
+      // 基础销售属性
+      baseSaleAttr: [],
+      // SPU所有销售类型
+      spuSaleAttr: [],
     };
   },
   props: {
@@ -94,11 +116,22 @@ export default {
     },
   },
   methods: {
+    /* 获取所有基础销售类型 */
+    async getBaseSaleAttrList() {
+      const { id } = this.supEveryData;
+      const res = await this.$API.spu.getBaseSaleAttrList(id);
+      console.log(res);
+      if (res.code === 200) {
+        this.$message.success("所有品牌销售数据获取成功");
+        this.spuSaleAttr = res.data;
+      } else {
+        this.$message.error("所有品牌销售数据获取成功");
+      }
+    },
     /* 获取所有销售属性 */
     async getSpuSaleAttrList() {
       const { id } = this.supEveryData;
       const res = await this.$API.spu.getSpuSaleAttrList(id);
-      console.log(res);
       //data: Array(3)
       // 0:
       // baseSaleAttrId: 1
@@ -115,7 +148,7 @@ export default {
       // spuId: 2218
       if (res.code === 200) {
         this.$message.success("所有品牌销售数据获取成功");
-        this.baseSaleAttrId = res.data;
+        this.baseSaleAttr = res.data;
       } else {
         this.$message.error("所有品牌销售数据获取成功");
       }
@@ -169,6 +202,7 @@ export default {
     this.getTrademarkList();
     this.getSpuImageList();
     this.getSpuSaleAttrList();
+    this.getBaseSaleAttrList();
   },
 };
 </script>
