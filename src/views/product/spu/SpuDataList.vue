@@ -88,12 +88,19 @@ export default {
       this.current = current;
       this.getPageSpuData(this.current, this.size);
     },
-  },
-  mounted() {
-    this.$bus.$on("allAttrsData", (category) => {
+    // 自定义全局事件回调
+    handleEmitAllattrData(category) {
       this.category = category;
       this.getPageSpuData(this.current, this.size);
-    });
+    },
+  },
+  mounted() {
+    this.$bus.$on("allAttrsData", this.handleEmitAllattrData);
+  },
+
+  beforeDestroy() {
+    //否则每一次都会绑定一个事件
+    this.$bus.$off("allAttrsData", this.handleEmitAllattrData);
   },
 };
 </script>
