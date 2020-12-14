@@ -231,6 +231,7 @@ export default {
     // 清空属性列表
     clsAttribut() {
       this.attrList = [];
+      this.category.category3Id = "";
     },
   },
   components: {
