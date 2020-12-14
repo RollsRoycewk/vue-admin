@@ -128,7 +128,7 @@
 
 <script>
 // 引入组件
-import Category from "./category";
+import Category from "@/components/Category/category";
 
 export default {
   name: "AttrList",
