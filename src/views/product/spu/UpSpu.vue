@@ -1,20 +1,25 @@
 <template>
-  <el-card class="box-card">
+  <el-card class="box-card" style="margin: 20px 0">
     <el-form label-width="80px">
       <!-- SPU名称 -->
       <el-form-item label="SPU名称">
-        <el-input placeholder="SPU名称"></el-input>
+        <el-input placeholder="SPU名称" v-model="supEveryData.tmId"></el-input>
       </el-form-item>
       <!-- 品牌名称 -->
       <el-form-item label="品牌">
-        <el-select placeholder="请选择品牌" v-model="test">
+        <!-- 默认图片 -->
+        <el-select placeholder="请选择品牌" v-model="supEveryData.tmId">
           <el-option label="区域一" value="shanghai"></el-option>
           <el-option label="区域二" value="beijing"></el-option>
         </el-select>
       </el-form-item>
       <!-- SPU描述 -->
       <el-form-item label="SPU描述">
-        <el-input type="textarea" placeholder="SPU描述"></el-input>
+        <el-input
+          type="textarea"
+          placeholder="SPU描述"
+          v-model="supEveryData.description"
+        ></el-input>
       </el-form-item>
       <!-- SPU图片 -->
       <!-- :on-preview="handlePictureCardPreview"
@@ -60,11 +65,18 @@
 
 <script>
 export default {
-  name: "AddSpu",
+  name: "UpSpu",
   data() {
     return {
       test: [],
+      // supData的数据
+      supEveryData: this.supData,
     };
+  },
+  props: {
+    supData: {
+      type: Object,
+    },
   },
 };
 </script>

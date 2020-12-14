@@ -12,18 +12,23 @@
       <el-table-column prop="spuName" label="SPU名称"> </el-table-column>
       <el-table-column prop="description" label="SPU描述"> </el-table-column>
       <el-table-column prop="address" label="操作">
-        <el-button type="primary" size="mini"
-          ><i class="el-icon-plus"></i
-        ></el-button>
-        <el-button type="primary" size="mini"
-          ><i class="el-icon-edit"></i>
-        </el-button>
-        <el-button type="info" size="mini">
-          <i class="el-icon-info"></i>
-        </el-button>
-        <el-button type="danger" size="mini">
-          <i class="el-icon-delete"></i>
-        </el-button>
+        <template v-slot="{ row }">
+          <el-button type="primary" size="mini"
+            ><i class="el-icon-plus"></i
+          ></el-button>
+          <el-button
+            type="primary"
+            size="mini"
+            @click="$emit('spuEveryData', row)"
+            ><i class="el-icon-edit"></i>
+          </el-button>
+          <el-button type="info" size="mini">
+            <i class="el-icon-info"></i>
+          </el-button>
+          <el-button type="danger" size="mini">
+            <i class="el-icon-delete"></i>
+          </el-button>
+        </template>
       </el-table-column>
     </el-table>
     <!-- 分页器 -->
@@ -52,6 +57,7 @@ export default {
       total: 0,
       // spu所有数据
       spuAllData: [],
+      // 三级导航id
       category: {
         category1Id: "",
         category2Id: "",
@@ -112,6 +118,14 @@ export default {
     this.$bus.$off("clsAttr", this.clsAttr);
   },
 };
+
+// category3Id:61
+// description:"测试品牌1~"
+// id:2219
+// spuImageList:null
+// spuName:"ce1~"
+// spuSaleAttrList:null
+// tmId:5923
 </script>
 
 <style lang="sass">
