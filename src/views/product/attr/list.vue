@@ -200,7 +200,24 @@ export default {
     },
     // 提交更新属性值
     async saveSubit() {
-      const result = await this.$API.attrs.getUpdataAttr(this.attributeData);
+      const isAddCategory = !this.attributeData.id;
+      // console.log(this.attributeData);
+      const data = this.attributeData;
+      let result;
+
+      if (isAddCategory) {
+        // 如果是添加
+        data.categoryLevel = 3;
+        data.categoryId = this.category.category3Id;
+        result = await this.$API.attrs.getUpdataAttr(data);
+      } else {
+        result = await this.$API.attrs.getUpdataAttr(data);
+      }
+      // categoryId: 994
+      // categoryLevel: 3
+      // id: 3725
+
+      // const result = await this.$API.attrs.getUpdataAttr(this.attributeData);
       if (result.ok) {
         this.$message.success("更新属性完成,重新请求完成");
         // 如果成功,重新请求数据
