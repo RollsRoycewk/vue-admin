@@ -9,7 +9,11 @@
     <!-- 信息 -->
     <el-card class="box-card" v-show="isAttrsShow">
       <!-- 按钮 -->
-      <el-button type="primary" :disabled="!category.category3Id">
+      <el-button
+        type="primary"
+        :disabled="!category.category3Id"
+        @click="addCategory"
+      >
         <i class="el-icon-plus"></i>
         <span>添加属性</span>
       </el-button>
@@ -134,6 +138,13 @@ export default {
     };
   },
   methods: {
+    // 添加分类属性
+    addCategory() {
+      this.isAttrsShow = false;
+      // 清空之前选择的数据
+      this.attributeData.attrName = "";
+      this.attributeData.attrValueList = [];
+    },
     async getAttrList(category) {
       // 后面更新数以后重新刷新用
       this.category = category;
