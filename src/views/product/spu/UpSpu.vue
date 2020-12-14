@@ -78,6 +78,16 @@ export default {
       type: Object,
     },
   },
+  methods: {
+    /* 获取所有品牌数据 */
+    async getTrademarkList() {
+      const res = await this.$API.spu.getBaseSaleAttrList();
+      console.log(res);
+    },
+  },
+  mounted() {
+    this.getTrademarkList();
+  },
 };
 </script>
 

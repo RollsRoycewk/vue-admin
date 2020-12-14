@@ -54,5 +54,12 @@ export default {
         category3Id
       }
     });
+  },
+  /* 获取所有品牌商标 */
+  getBaseSaleAttrList() {
+    return request({
+      url: `${api_name}/baseTrademark/getTrademarkList`,
+      method: "GET"
+    });
   }
 };

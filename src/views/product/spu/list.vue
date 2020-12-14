@@ -1,8 +1,8 @@
 <template>
   <div>
     <Category></Category>
-    <SpuDataList v-show="isShowSpu" @spuEveryData="spuEveryData"></SpuDataList>
-    <UpSpu v-show="!isShowSpu" :supData="supData"></UpSpu>
+    <SpuDataList v-if="isShowSpu" @spuEveryData="spuEveryData"></SpuDataList>
+    <UpSpu v-else :supData="supData"></UpSpu>
   </div>
 </template>
 
