@@ -79,7 +79,7 @@ export default {
       this.category3List = [];
       this.category.category2Id = "";
       this.category.category3Id = "";
-      this.$emit("clsAttr");
+      this.$bus.$emit("clsAttr");
 
       const res = await this.$API.attrs.getCategory2Data(e);
       if (res.ok) {
@@ -95,7 +95,7 @@ export default {
       /* 点击一级目录,让二级三级目录清空 */
       this.category3List = [];
       this.category.category3Id = "";
-      this.$emit("clsAttr");
+      this.$bus.$emit("clsAttr");
 
       const res = await this.$API.attrs.getCategory3Data(e);
       if (res.ok) {

@@ -1,7 +1,7 @@
 <template>
   <el-card class="box-card" style="margin: 20px 0">
     <!-- 添加按钮 -->
-    <el-button type="primary">
+    <el-button type="primary" :disabled="!category.category3Id">
       <i class="el-icon-plus"></i>
       添加SPU
     </el-button>
@@ -61,14 +61,13 @@ export default {
   },
   methods: {
     async getPageSpuData(current, size) {
-      console.log(current, size);
       const { category3Id } = this.category;
       const res = await this.$API.spu.getPageSpu({
         category3Id,
         current,
         size,
       });
-      console.log(res);
+      // console.log(res);
       if (res.code === 200) {
         this.$message.success("SPU数据获取完成");
         this.spuAllData = res.data.records;
@@ -93,14 +92,24 @@ export default {
       this.category = category;
       this.getPageSpuData(this.current, this.size);
     },
+    // 清空数据
+    clsAttr() {
+      this.current = 1;
+      this.size = 3;
+      this.total = 0;
+      this.spuAllData = [];
+      this.category.category3Id = "";
+    },
   },
   mounted() {
     this.$bus.$on("allAttrsData", this.handleEmitAllattrData);
+    this.$bus.$on("clsAttr", this.clsAttr);
   },
 
   beforeDestroy() {
     //否则每一次都会绑定一个事件
     this.$bus.$off("allAttrsData", this.handleEmitAllattrData);
+    this.$bus.$off("clsAttr", this.clsAttr);
   },
 };
 </script>
