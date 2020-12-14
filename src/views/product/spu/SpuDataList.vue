@@ -11,7 +11,20 @@
       </el-table-column>
       <el-table-column prop="spuName" label="SPU名称"> </el-table-column>
       <el-table-column prop="description" label="SPU描述"> </el-table-column>
-      <el-table-column prop="address" label="操作"> </el-table-column>
+      <el-table-column prop="address" label="操作">
+        <el-button type="primary" size="mini"
+          ><i class="el-icon-plus"></i
+        ></el-button>
+        <el-button type="primary" size="mini"
+          ><i class="el-icon-edit"></i>
+        </el-button>
+        <el-button type="info" size="mini">
+          <i class="el-icon-info"></i>
+        </el-button>
+        <el-button type="danger" size="mini">
+          <i class="el-icon-delete"></i>
+        </el-button>
+      </el-table-column>
     </el-table>
     <!-- 分页器 -->
 
