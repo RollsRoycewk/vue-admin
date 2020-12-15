@@ -34,6 +34,8 @@
           :file-list="upImgFormat"
           :on-preview="handlePictureCardPreview"
           :on-remove="handleRemove"
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload"
         >
           <i class="el-icon-plus"></i>
         </el-upload>
@@ -199,11 +201,34 @@ export default {
     handleRemove(file, fileList) {
       // console.log(file, fileList);
       this.spuImageList = this.spuImageList.filter(
-        (supimg) => supimg.id !== file.id
+        (supimg) => supimg.imgUrl !== file.url
       );
     },
     // 添加图片
+    /* 上传图片 */
+    handleAvatarSuccess(res, file) {
+      // this.trademarkForm.logoUrl = res.data;
+      console.log(res, file);
+      this.spuImageList.push({
+        uid: file.uid,
+        spuId: this.supEveryData.id,
+        imgName: file.name,
+        imgUrl: res.data,
+      });
+    },
+    beforeAvatarUpload(file) {
+      const imgType = ["image/jpg", "image/png", "image/jpeg"];
+      const isJPG = imgType.indexOf(file.type) > -1;
+      const isLt50kb = file.size / 1024 < 50;
 
+      if (!isJPG) {
+        this.$message.error("上传品牌LOGO只能是 JPG 或 PNG 格式!");
+      }
+      if (!isLt50kb) {
+        this.$message.error("上传品牌LOGO大小不能超过 50 kb!");
+      }
+      return isJPG && isLt50kb;
+    },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
@@ -214,6 +239,7 @@ export default {
     upImgFormat() {
       return this.spuImageList.map((img) => {
         return {
+          uid: img.uid || img.id,
           id: img.id,
           name: img.imgName,
           url: img.imgUrl,
