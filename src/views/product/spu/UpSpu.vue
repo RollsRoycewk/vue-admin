@@ -91,9 +91,10 @@
           <el-table-column prop="address" label="属性值名称列表">
             <template v-slot="{ row, $index }">
               <el-tag
+                @close="delTag(row, index)"
                 closable
                 style="margin-left: 5px"
-                v-for="ValueList in row.spuSaleAttrValueList"
+                v-for="(ValueList, index) in row.spuSaleAttrValueList"
                 :key="ValueList.id"
                 >{{ ValueList.saleAttrValueName }}</el-tag
               >
@@ -172,6 +173,13 @@ export default {
     },
   },
   methods: {
+    // 删除
+    delTag(row, index) {
+      // row.spuSaleAttrValueList = row.spuSaleAttrValueList.filter(
+      //   (item) => item.id !== id
+      // );
+      row.spuSaleAttrValueList.splice(index, 1);
+    },
     // 效验
     submitSup(formName) {
       this.$refs[formName].validate((valid) => {
