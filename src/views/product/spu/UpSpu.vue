@@ -120,9 +120,11 @@
             </template>
           </el-table-column>
           <el-table-column prop="address" label="操作" width="150">
-            <el-button type="danger" size="mini">
-              <i class="el-icon-delete"></i>
-            </el-button>
+            <template v-slot="{ $index }">
+              <el-button type="danger" size="mini" @click="delRow($index)">
+                <i class="el-icon-delete"></i>
+              </el-button>
+            </template>
           </el-table-column>
         </el-table>
         <!-- 保存取消按钮 -->
@@ -173,6 +175,10 @@ export default {
     },
   },
   methods: {
+    // 删除row
+    delRow(index) {
+      this.spuSaleAttr.splice(index, 1);
+    },
     // 删除
     delTag(row, index) {
       // row.spuSaleAttrValueList = row.spuSaleAttrValueList.filter(
