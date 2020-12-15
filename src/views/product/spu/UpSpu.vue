@@ -130,10 +130,10 @@ export default {
     async getBaseSaleAttrList() {
       const { id } = this.supEveryData;
       const res = await this.$API.spu.getBaseSaleAttrList(id);
-      console.log(res);
+      // console.log(res);
       if (res.code === 200) {
         this.$message.success("所有品牌销售数据获取成功");
-        this.spuSaleAttr = res.data;
+        this.baseSaleAttr = res.data;
       } else {
         this.$message.error("所有品牌销售数据获取成功");
       }
@@ -158,7 +158,8 @@ export default {
       // spuId: 2218
       if (res.code === 200) {
         this.$message.success("所有品牌销售数据获取成功");
-        this.baseSaleAttr = res.data;
+        this.spuSaleAttr = res.data;
+        // this.baseSaleAttr = res.data;
       } else {
         this.$message.error("所有品牌销售数据获取成功");
       }
