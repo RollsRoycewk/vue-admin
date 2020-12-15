@@ -214,12 +214,34 @@ export default {
     },
     // 效验
     submitSup(formName) {
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          alert("submit!");
-          return;
+          /* 
+            {
+                "category3Id": 0, // 
+                "description": "string",
+                "id": 0,
+                "spuImageList": [],
+                "spuName": "string",
+                "spuSaleAttrList": []
+                  }
+                ],
+                "tmId": 0
+            }
+          */
+          const data = {
+            ...this.supEveryData,
+            spuImageList: this.spuImageList,
+            spuSaleAttrList: this.spuSaleAttr,
+          };
+
+          const res = await this.$API.spu.getUpdateSpuInfo(data);
+          if (res.ok) {
+            this.$message.success("SPU数据上传成功");
+            this.$emit("isShowState");
+          }
         } else {
-          console.log("error submit!!");
+          this.$message.error("数据效验失败");
           return false;
         }
       });
