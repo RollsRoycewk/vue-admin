@@ -44,10 +44,10 @@
         </el-dialog>
       </el-form-item>
       <!-- 销售类型 -->
-      <el-form-item label="销售属性">
+      <el-form-item label="销售属性" prop="sale">
         <el-select
           :placeholder="`还有${filterSaleAttr.length}未选择`"
-          v-model="test"
+          v-model="supEveryData.sale"
         >
           <el-option
             :label="spuSale.name"
@@ -56,7 +56,7 @@
             :key="spuSale.id"
           ></el-option>
         </el-select>
-        <el-button type="primary">
+        <el-button type="primary" @click="addSpuSaleAttr">
           <i class="el-icon-plus"></i>
           添加销售类型
         </el-button>
@@ -64,7 +64,7 @@
         <el-table
           border
           style="width: 100%; margin: 20px 0"
-          :data="baseSaleAttr"
+          :data="spuSaleAttr"
         >
           <el-table-column
             prop="date"
@@ -116,7 +116,7 @@ export default {
       dialogVisible: false,
       // 基础销售属性
       baseSaleAttr: [],
-      // SPU所有销售类型
+      // SPU销售类型
       spuSaleAttr: [],
     };
   },
@@ -126,6 +126,23 @@ export default {
     },
   },
   methods: {
+    /* 添加销售类型 */
+    addSpuSaleAttr() {
+      const { sale, id } = this.supEveryData;
+      const res = this.baseSaleAttr.find((item) => item.id === sale);
+
+      console.log(res, id);
+
+      // // 添加到下面列表中
+      this.spuSaleAttr.push({
+        baseSaleAttrId: res.id, // 所有销售属性id
+        saleAttrName: res.name, // 所有销售属性名称
+        spuId: id, // SPU id
+        spuSaleAttrValueList: [], // 销售属性值列表
+      });
+
+      this.supEveryData.sale = "";
+    },
     /* 获取所有基础销售类型 */
     async getBaseSaleAttrList() {
       const { id } = this.supEveryData;
@@ -248,9 +265,9 @@ export default {
       });
     },
     filterSaleAttr() {
-      return this.baseSaleAttr.filter((sale) => {
+      return this.baseSaleAttr.filter((base) => {
         return !this.spuSaleAttr.find(
-          (item) => item.id === sale.baseSaleAttrId
+          (item) => base.id === item.baseSaleAttrId
         );
       });
     },
