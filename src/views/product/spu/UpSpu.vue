@@ -81,13 +81,33 @@
           <el-table-column prop="saleAttrName" label="属性名" width="150">
           </el-table-column>
           <el-table-column prop="address" label="属性值名称列表">
-            <template v-slot="{ row }">
+            <template v-slot="{ row, $index }">
               <el-tag
+                closable
                 style="margin-left: 5px"
                 v-for="ValueList in row.spuSaleAttrValueList"
                 :key="ValueList.id"
                 >{{ ValueList.saleAttrValueName }}</el-tag
               >
+              <el-input
+                v-if="row.edit"
+                size="mini"
+                style="width: 100px"
+                autofocus
+                ref="attrInput"
+                placeholder="请输入内容"
+                @blur="editComputed(row, $index)"
+                @keyup.enter.native="editComputed(row, $index)"
+                v-model="saleAttrValueText"
+              >
+              </el-input>
+              <el-button
+                v-else
+                icon="el-icon-plus"
+                size="mini"
+                @click="edit(row)"
+              >
+              </el-button>
             </template>
           </el-table-column>
           <el-table-column prop="address" label="操作" width="150">
@@ -122,6 +142,8 @@ export default {
       baseSaleAttr: [],
       // SPU销售类型
       spuSaleAttr: [],
+      // 选项
+      saleAttrValueText: "",
     };
   },
   props: {
@@ -130,6 +152,27 @@ export default {
     },
   },
   methods: {
+    // edit,解决input聚焦问题
+    edit(row) {
+      // 设置属性,让其确认显示哪个
+      this.$set(row, "edit", true);
+      this.$nextTick(() => {
+        this.$refs.attrInput.focus();
+      });
+    },
+    // 如果没有就不添加
+    editComputed(row, index) {
+      if (this.saleAttrValueText) {
+        row.spuSaleAttrValueList.push({
+          baseSaleAttrId: row.baseSaleAttrId,
+          saleAttrName: row.saleAttrName,
+          saleAttrValueName: this.saleAttrValueText,
+          spuId: row.spuId,
+        });
+        this.saleAttrValueText = "";
+      }
+      row.edit = false;
+    },
     /* 添加销售类型 */
     addSpuSaleAttr() {
       const { sale, id } = this.supEveryData;
