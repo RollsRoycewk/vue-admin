@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Category></Category>
+    <Category :disabled="!isShowSpu"></Category>
     <SpuDataList v-if="isShowSpu" @spuEveryData="spuEveryData"></SpuDataList>
     <UpSpu v-else :supData="supData" @isShowState="isShowState"></UpSpu>
   </div>
@@ -26,8 +26,11 @@ export default {
       this.isShowSpu = false;
       this.supData = { ...row };
     },
-    isShowState() {
+    isShowState(category3Id) {
       this.isShowSpu = true;
+      this.$nextTick(() => {
+        this.$bus.$emit("allAttrsData", { category3Id });
+      });
     },
   },
   components: {

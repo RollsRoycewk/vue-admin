@@ -129,7 +129,9 @@
         </el-table>
         <!-- 保存取消按钮 -->
         <el-button type="primary" @click="submitSup('ruleSup')">保存</el-button>
-        <el-button @click="$emit('isShowState')">取消</el-button>
+        <el-button @click="$emit('isShowState', supEveryData.category3Id)"
+          >取消</el-button
+        >
       </el-form-item>
     </el-form>
   </el-card>
@@ -238,7 +240,7 @@ export default {
           const res = await this.$API.spu.getUpdateSpuInfo(data);
           if (res.ok) {
             this.$message.success("SPU数据上传成功");
-            this.$emit("isShowState");
+            this.$emit("isShowState", this.supEveryData.category3Id);
           }
         } else {
           this.$message.error("数据效验失败");
