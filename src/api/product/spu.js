@@ -56,7 +56,7 @@ export default {
     });
   },
   /* 获取所有品牌商标 */
-  getBaseSaleAttrList() {
+  getTrademarkList() {
     return request({
       url: `${api_name}/baseTrademark/getTrademarkList`,
       method: "GET"

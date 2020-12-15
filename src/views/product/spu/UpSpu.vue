@@ -3,7 +3,10 @@
     <el-form label-width="80px">
       <!-- SPU名称 -->
       <el-form-item label="SPU名称">
-        <el-input placeholder="SPU名称" v-model="supEveryData.tmId"></el-input>
+        <el-input
+          placeholder="SPU名称"
+          v-model="supEveryData.spuName"
+        ></el-input>
       </el-form-item>
       <!-- 品牌名称 -->
       <el-form-item label="品牌">
@@ -227,7 +230,7 @@ export default {
     },
     /* 获取所有品牌数据 */
     async getTrademarkList() {
-      const res = await this.$API.spu.getBaseSaleAttrList();
+      const res = await this.$API.spu.getTrademarkList();
       if (res.code === 200) {
         this.$message.success("所有品牌数据获取成功");
         this.trademarkList = res.data;
