@@ -14,7 +14,7 @@
         ></el-input>
       </el-form-item>
       <!-- 品牌名称 -->
-      <el-form-item label="品牌" prop="spuBrand">
+      <el-form-item label="品牌" prop="tmId">
         <!-- 默认图片 -->
         <el-select placeholder="请选择品牌" v-model="supEveryData.tmId">
           <el-option
@@ -26,7 +26,7 @@
         </el-select>
       </el-form-item>
       <!-- SPU描述 -->
-      <el-form-item label="SPU描述" prop="spuDeScript">
+      <el-form-item label="SPU描述" prop="description">
         <el-input
           type="textarea"
           placeholder="SPU描述"
@@ -146,15 +146,14 @@ export default {
         spuName: [
           { required: true, message: "请输入SPU名称", trigger: "blur" },
         ],
-        spuBrand: [
-          { required: true, message: "请选择品牌名称", trigger: "blur" },
-        ],
-        spuDeScript: [{ required: true, message: "请输入品牌描述" }],
-        spuImage: [{ required: true, message: "上传品牌图片" }],
-        sale: [{ required: true, message: "请选择品牌销售属性" }],
+        tmId: [{ required: true, message: "请选择品牌名称" }],
+        description: [{ required: true, message: "请输入品牌描述" }],
+        spuImage: [{ validator: this.spuImageValidator, required: true }],
+        sale: [{ validator: this.saleValidator, required: true }],
       },
       // supData的数据
       supEveryData: this.supData,
+
       // 所有品牌数据
       trademarkList: [],
       // 所有图片数据
@@ -175,6 +174,33 @@ export default {
     },
   },
   methods: {
+    // 属性选择效验
+    saleValidator(rule, value, callback) {
+      if (this.spuSaleAttr.length === 0) {
+        callback(new Error("请至少选择一个销售属性"));
+        return;
+      }
+
+      const res = this.spuSaleAttr.some(
+        (item) => item.spuSaleAttrValueList.length === 0
+      );
+
+      if (res) {
+        callback(new Error("请至少选择一个销售属性名称"));
+        return;
+      }
+
+      callback();
+    },
+    // 图片效验
+    spuImageValidator(rule, value, callback) {
+      if (this.spuImageList.length > 0) {
+        // 效验通过
+        callback();
+        return;
+      }
+      callback(new Error("请至少上传一张图片"));
+    },
     // 删除row
     delRow(index) {
       this.spuSaleAttr.splice(index, 1);
