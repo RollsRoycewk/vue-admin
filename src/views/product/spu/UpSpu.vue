@@ -195,13 +195,15 @@ export default {
         this.$message.error("该品牌图片数据获取成功");
       }
     },
-    // 处理图片
+    // 删除图片
     handleRemove(file, fileList) {
-      // console.log(file.id, fileList);
+      // console.log(file, fileList);
       this.spuImageList = this.spuImageList.filter(
         (supimg) => supimg.id !== file.id
       );
     },
+    // 添加图片
+
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
