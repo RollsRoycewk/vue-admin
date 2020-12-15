@@ -31,7 +31,7 @@
         <el-upload
           :action="`${$BASE_API}/admin/product/fileUpload`"
           list-type="picture-card"
-          :file-list="spuImageList"
+          :file-list="upImgFormat"
           :on-preview="handlePictureCardPreview"
           :on-remove="handleRemove"
         >
@@ -92,7 +92,7 @@
         </el-table>
         <!-- 保存取消按钮 -->
         <el-button type="primary">保存</el-button>
-        <el-button>取消</el-button>
+        <el-button @click="$emit('isShowState')">取消</el-button>
       </el-form-item>
     </el-form>
   </el-card>
@@ -183,13 +183,14 @@ export default {
       //  [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
       if (res.code === 200) {
         this.$message.success("该品牌图片数据获取成功");
-        this.spuImageList = res.data.map((item) => {
-          return {
-            id: item.id,
-            name: item.imgName,
-            url: item.imgUrl,
-          };
-        });
+        this.spuImageList = res.data;
+        // this.spuImageList = res.data.map((item) => {
+        //   return {
+        //     id: item.id,
+        //     name: item.imgName,
+        //     url: item.imgUrl,
+        //   };
+        // });
       } else {
         this.$message.error("该品牌图片数据获取成功");
       }
@@ -207,6 +208,16 @@ export default {
     },
   },
   computed: {
+    // 处理图片格式,因为上传的要求是这样,但是又不能直接修改掉原数据
+    upImgFormat() {
+      return this.spuImageList.map((img) => {
+        return {
+          id: img.id,
+          name: img.imgName,
+          url: img.imgUrl,
+        };
+      });
+    },
     filterSaleAttr() {
       return this.baseSaleAttr.filter((sale) => {
         return !this.spuSaleAttr.find(

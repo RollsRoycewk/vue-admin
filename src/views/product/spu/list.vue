@@ -2,7 +2,7 @@
   <div>
     <Category></Category>
     <SpuDataList v-if="isShowSpu" @spuEveryData="spuEveryData"></SpuDataList>
-    <UpSpu v-else :supData="supData"></UpSpu>
+    <UpSpu v-else :supData="supData" @isShowState="isShowState"></UpSpu>
   </div>
 </template>
 
@@ -25,6 +25,9 @@ export default {
     spuEveryData(row) {
       this.isShowSpu = false;
       this.supData = { ...row };
+    },
+    isShowState() {
+      this.isShowSpu = true;
     },
   },
   components: {
