@@ -56,7 +56,11 @@
             :key="spuSale.id"
           ></el-option>
         </el-select>
-        <el-button type="primary" @click="addSpuSaleAttr">
+        <el-button
+          type="primary"
+          @click="addSpuSaleAttr"
+          :disabled="!filterSaleAttr.length"
+        >
           <i class="el-icon-plus"></i>
           添加销售类型
         </el-button>
@@ -130,9 +134,6 @@ export default {
     addSpuSaleAttr() {
       const { sale, id } = this.supEveryData;
       const res = this.baseSaleAttr.find((item) => item.id === sale);
-
-      console.log(res, id);
-
       // // 添加到下面列表中
       this.spuSaleAttr.push({
         baseSaleAttrId: res.id, // 所有销售属性id
