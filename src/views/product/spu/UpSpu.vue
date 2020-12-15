@@ -1,15 +1,20 @@
 <template>
   <el-card class="box-card" style="margin: 20px 0">
-    <el-form label-width="80px">
+    <el-form
+      label-width="80px"
+      :model="supEveryData"
+      :rules="rules"
+      ref="ruleSup"
+    >
       <!-- SPU名称 -->
-      <el-form-item label="SPU名称">
+      <el-form-item label="SPU名称" prop="spuName">
         <el-input
           placeholder="SPU名称"
           v-model="supEveryData.spuName"
         ></el-input>
       </el-form-item>
       <!-- 品牌名称 -->
-      <el-form-item label="品牌">
+      <el-form-item label="品牌" prop="spuBrand">
         <!-- 默认图片 -->
         <el-select placeholder="请选择品牌" v-model="supEveryData.tmId">
           <el-option
@@ -21,7 +26,7 @@
         </el-select>
       </el-form-item>
       <!-- SPU描述 -->
-      <el-form-item label="SPU描述">
+      <el-form-item label="SPU描述" prop="spuDeScript">
         <el-input
           type="textarea"
           placeholder="SPU描述"
@@ -30,7 +35,7 @@
       </el-form-item>
       <!-- SPU图片 -->
 
-      <el-form-item label="SPU图片">
+      <el-form-item label="SPU图片" prop="spuImage">
         <el-upload
           :action="`${$BASE_API}/admin/product/fileUpload`"
           list-type="picture-card"
@@ -120,7 +125,7 @@
           </el-table-column>
         </el-table>
         <!-- 保存取消按钮 -->
-        <el-button type="primary">保存</el-button>
+        <el-button type="primary" @click="submitSup('ruleSup')">保存</el-button>
         <el-button @click="$emit('isShowState')">取消</el-button>
       </el-form-item>
     </el-form>
@@ -133,6 +138,18 @@ export default {
   data() {
     return {
       test: [],
+      // 效验
+      rules: {
+        spuName: [
+          { required: true, message: "请输入SPU名称", trigger: "blur" },
+        ],
+        spuBrand: [
+          { required: true, message: "请选择品牌名称", trigger: "blur" },
+        ],
+        spuDeScript: [{ required: true, message: "请输入品牌描述" }],
+        spuImage: [{ required: true, message: "上传品牌图片" }],
+        sale: [{ required: true, message: "请选择品牌销售属性" }],
+      },
       // supData的数据
       supEveryData: this.supData,
       // 所有品牌数据
@@ -155,6 +172,18 @@ export default {
     },
   },
   methods: {
+    // 效验
+    submitSup(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          alert("submit!");
+          return;
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
     // edit,解决input聚焦问题
     edit(row) {
       // 设置属性,让其确认显示哪个
