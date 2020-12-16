@@ -4,7 +4,7 @@
     <el-button
       type="primary"
       :disabled="!category.category3Id"
-      @click="$emit('spuEveryData', {})"
+      @click="$emit('spuEveryData', { category3Id: category.category3Id })"
     >
       <i class="el-icon-plus"></i>
       添加SPU
