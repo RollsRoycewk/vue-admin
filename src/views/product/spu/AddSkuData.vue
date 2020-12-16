@@ -89,6 +89,11 @@ export default {
       text: "",
     };
   },
+  props: {
+    skuDataList: {
+      type: Object,
+    },
+  },
 };
 </script>
 

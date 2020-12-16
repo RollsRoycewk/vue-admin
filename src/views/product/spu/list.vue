@@ -1,9 +1,15 @@
 <template>
   <div>
-    <Category :disabled="!isShowSpu"></Category>
-    <SpuDataList v-if="isShowSpu" @spuEveryData="spuEveryData"></SpuDataList>
-    <UpSpu v-else :supData="supData" @isShowState="isShowState"></UpSpu>
-    <AddSkuData />
+    <AddSkuData v-if="isShowAddSku" :skuDataList="skuDataList" />
+    <div v-else>
+      <Category :disabled="!isShowSpu"></Category>
+      <SpuDataList
+        v-if="isShowSpu"
+        @spuEveryData="spuEveryData"
+        @isShowAddSkuState="isShowAddSkuState"
+      ></SpuDataList>
+      <UpSpu v-else :supData="supData" @isShowState="isShowState"></UpSpu>
+    </div>
   </div>
 </template>
 
@@ -17,13 +23,22 @@ export default {
   name: "SpuList",
   data() {
     return {
+      // AddSku
+      skuDataList: {},
       // 确定展示sup页面还是修改页面
       isShowSpu: true,
       // sup数据
       supData: {},
+      // 是否展示AddSku
+      isShowAddSku: false,
     };
   },
   methods: {
+    // 关闭
+    isShowAddSkuState(row) {
+      this.isShowAddSku = true;
+      this.skuDataList = { ...row };
+    },
     spuEveryData(row) {
       this.isShowSpu = false;
       this.supData = { ...row };

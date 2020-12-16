@@ -17,7 +17,10 @@
       <el-table-column prop="description" label="SPU描述"> </el-table-column>
       <el-table-column prop="address" label="操作">
         <template v-slot="{ row }">
-          <el-button type="primary" size="mini"
+          <el-button
+            type="primary"
+            size="mini"
+            @click="$emit('isShowAddSkuState', { ...row, ...category })"
             ><i class="el-icon-plus"></i
           ></el-button>
           <el-button
