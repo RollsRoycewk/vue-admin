@@ -245,7 +245,9 @@ export default {
           }
 
           if (res.ok) {
-            this.$message.success("SPU数据上传成功");
+            this.$message.success(
+              `SPU数据${this.supEveryData.id ? "修改" : "添加"}成功`
+            );
             this.$emit("isShowState", this.supEveryData.category3Id);
           }
         } else {
