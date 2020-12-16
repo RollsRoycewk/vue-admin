@@ -3,6 +3,7 @@
     <Category :disabled="!isShowSpu"></Category>
     <SpuDataList v-if="isShowSpu" @spuEveryData="spuEveryData"></SpuDataList>
     <UpSpu v-else :supData="supData" @isShowState="isShowState"></UpSpu>
+    <AddSkuData />
   </div>
 </template>
 
@@ -10,6 +11,7 @@
 import Category from "@/components/Category/category";
 import SpuDataList from "./SpuDataList";
 import UpSpu from "./UpSpu";
+import AddSkuData from "./AddSkuData";
 
 export default {
   name: "SpuList",
@@ -37,6 +39,7 @@ export default {
     Category,
     SpuDataList,
     UpSpu,
+    AddSkuData,
   },
 };
 </script>
