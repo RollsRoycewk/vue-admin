@@ -74,7 +74,10 @@
         <!-- 保存取消按钮 -->
         <div class="addSkuData-save">
           <el-button type="primary" disabled>保存</el-button>
-          <el-button disabled>取消</el-button>
+          <el-button
+            @click="$emit('isShowAddSkuFalse', skuDataList.category3Id)"
+            >取消</el-button
+          >
         </div>
       </el-form-item>
     </el-form>

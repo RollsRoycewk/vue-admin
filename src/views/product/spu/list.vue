@@ -1,6 +1,10 @@
 <template>
   <div>
-    <AddSkuData v-if="isShowAddSku" :skuDataList="skuDataList" />
+    <AddSkuData
+      v-if="isShowAddSku"
+      :skuDataList="skuDataList"
+      @isShowAddSkuFalse="isShowAddSkuFalse"
+    />
     <div v-else>
       <Category :disabled="!isShowSpu"></Category>
       <SpuDataList
@@ -35,6 +39,12 @@ export default {
   },
   methods: {
     // 关闭
+    isShowAddSkuFalse(category3Id) {
+      this.isShowAddSku = false;
+      this.$nextTick(() => {
+        this.$bus.$emit("allAttrsData", { category3Id });
+      });
+    },
     isShowAddSkuState(row) {
       this.isShowAddSku = true;
       this.skuDataList = { ...row };
