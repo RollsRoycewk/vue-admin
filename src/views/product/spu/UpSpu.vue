@@ -414,9 +414,11 @@ export default {
   },
   mounted() {
     this.getTrademarkList();
-    this.getSpuImageList();
-    this.getSpuSaleAttrList();
     this.getBaseSaleAttrList();
+    if (this.supEveryData.id) {
+      this.getSpuImageList();
+      this.getSpuSaleAttrList();
+    }
   },
 };
 </script>

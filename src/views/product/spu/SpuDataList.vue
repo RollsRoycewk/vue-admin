@@ -1,7 +1,11 @@
 <template>
   <el-card class="box-card" style="margin: 20px 0">
     <!-- 添加按钮 -->
-    <el-button type="primary" :disabled="!category.category3Id">
+    <el-button
+      type="primary"
+      :disabled="!category.category3Id"
+      @click="$emit('spuEveryData', {})"
+    >
       <i class="el-icon-plus"></i>
       添加SPU
     </el-button>
