@@ -237,7 +237,13 @@ export default {
             spuSaleAttrList: this.spuSaleAttr,
           };
 
-          const res = await this.$API.spu.getUpdateSpuInfo(data);
+          let res;
+          if (this.supEveryData.id) {
+            res = await this.$API.spu.getUpdateSpuInfo(data);
+          } else {
+            res = await this.$API.spu.getSaveSpuInfo(data);
+          }
+
           if (res.ok) {
             this.$message.success("SPU数据上传成功");
             this.$emit("isShowState", this.supEveryData.category3Id);
