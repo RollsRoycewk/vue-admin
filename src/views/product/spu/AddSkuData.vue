@@ -1,8 +1,8 @@
 <template>
   <el-card class="box-card">
-    <el-form ref="form" label-width="80px">
+    <el-form ref="form" label-width="80px" :model="supEveryData">
       <!-- SPU名称 -->
-      <el-form-item label="SPU名称"> </el-form-item>
+      <el-form-item label="SPU名称">{{ supEveryData.spuName }} </el-form-item>
       <!-- SKU名称 -->
       <el-form-item label="SKU名称">
         <el-input placeholder="SKU名称"></el-input>
@@ -30,21 +30,33 @@
       </el-form-item>
       <!-- 平台属性 -->
       <el-form-item label="平台属性">
-        <div class="addSkuData-select">
-          <span>啦啦啦</span>
+        <div class="addSkuData-select" v-for="attr in attrList" :key="attr.id">
+          <span>{{ attr.attrName }}</span>
           <el-select placeholder="请选择" v-model="text">
-            <el-option value="123">111</el-option>
-            <el-option value="456">222</el-option>
+            <el-option
+              v-for="attrValue in attr.attrValueList"
+              :key="attrValue.id"
+              :value="attrValue.id"
+              :label="attrValue.valueName"
+            ></el-option>
           </el-select>
         </div>
       </el-form-item>
       <!-- 销售属性 -->
       <el-form-item label="销售属性">
-        <div class="addSkuData-select">
-          <span>啦啦啦</span>
+        <div
+          class="addSkuData-select"
+          v-for="spuSale in spuSaleAttr"
+          :key="spuSale.id"
+        >
+          <span>{{ spuSale.saleAttrName }}</span>
           <el-select placeholder="请选择" v-model="text">
-            <el-option value="123">111</el-option>
-            <el-option value="456">222</el-option>
+            <el-option
+              v-for="spuSaleAttrValue in spuSale.spuSaleAttrValueList"
+              :key="spuSaleAttrValue.id"
+              :value="spuSaleAttrValue.id"
+              :label="spuSaleAttrValue.saleAttrValueName"
+            ></el-option>
           </el-select>
         </div>
       </el-form-item>
@@ -54,17 +66,17 @@
         <el-table
           border
           ref="multipleTable"
-          :data="[]"
+          :data="spuImageList"
           tooltip-effect="dark"
           style="width: 100%"
         >
           <el-table-column type="selection" width="55"> </el-table-column>
           <el-table-column label="图片" width="120">
             <template slot-scope="scope">
-              <img alt="" :src="scope.row.imgUrl" />
+              <img alt="" :src="scope.row.imgUrl" style="width: 100px" />
             </template>
           </el-table-column>
-          <el-table-column prop="name" label="名称"> </el-table-column>
+          <el-table-column prop="imgName" label="名称"> </el-table-column>
           <el-table-column prop="address" label="操作" show-overflow-tooltip>
             <template>
               <el-button type="primary" size="mini">设为默认</el-button>
@@ -90,12 +102,62 @@ export default {
   data() {
     return {
       text: "",
+      supEveryData: this.skuDataList,
+      spuSaleAttr: {},
+      spuImageList: [],
+      attrList: [],
     };
+  },
+  methods: {
+    /* 获取所有销售属性 */
+    async getSpuSaleAttrList() {
+      const { id } = this.supEveryData;
+      const res = await this.$API.spu.getSpuSaleAttrList(id);
+      if (res.code === 200) {
+        this.$message.success("所有品牌销售数据获取成功");
+        this.spuSaleAttr = res.data;
+        // this.baseSaleAttr = res.data;
+      } else {
+        this.$message.error("所有品牌销售数据获取成功");
+      }
+    },
+    /* 获取该品牌的图片 */
+    async getSpuImageList() {
+      const { id } = this.supEveryData;
+      const res = await this.$API.spu.getSpuImageList(id);
+      if (res.code === 200) {
+        this.$message.success("该品牌图片数据获取成功");
+        this.spuImageList = res.data;
+      } else {
+        this.$message.error("该品牌图片数据获取成功");
+      }
+    },
+    /* 获取平台属性 */
+    async getAttrList() {
+      // 后面更新数以后重新刷新用
+      const { category1Id, category2Id, category3Id } = this.supEveryData;
+      const res = await this.$API.attrs.getCategoryAttrsData({
+        category1Id,
+        category2Id,
+        category3Id,
+      });
+      if (res.ok) {
+        this.attrList = res.data;
+        this.$message.success("所有属性获取成功");
+      } else {
+        this.$message.error("所有属性获取成功");
+      }
+    },
   },
   props: {
     skuDataList: {
       type: Object,
     },
+  },
+  mounted() {
+    this.getSpuSaleAttrList();
+    this.getSpuImageList();
+    this.getAttrList();
   },
 };
 </script>
