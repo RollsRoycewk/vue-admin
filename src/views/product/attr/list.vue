@@ -125,6 +125,7 @@
 <script>
 // 引入组件
 import Category from "@/components/Category/category";
+import { mapState } from "vuex";
 
 export default {
   name: "AttrList",
@@ -138,9 +139,26 @@ export default {
         attrName: "",
         attrValueList: [],
       },
-      // 分类id
-      category: {},
+      // // 分类id
+      // category: {},
     };
+  },
+  watch: {
+    "category.category3Id"(category3Id) {
+      if (!category3Id) return;
+      this.getAttrList();
+    },
+    "category.category1Id"(category3Id) {
+      this.clsAttribut();
+    },
+    "category.category2Id"(category3Id) {
+      this.clsAttribut();
+    },
+  },
+  computed: {
+    ...mapState({
+      category: (state) => state.category.category,
+    }),
   },
   methods: {
     // 添加分类属性
@@ -150,10 +168,10 @@ export default {
       this.attributeData.attrName = "";
       this.attributeData.attrValueList = [];
     },
-    async getAttrList(category) {
+    async getAttrList() {
       // 后面更新数以后重新刷新用
-      this.category = category;
-      const res = await this.$API.attrs.getCategoryAttrsData(category);
+      // this.category = category;
+      const res = await this.$API.attrs.getCategoryAttrsData(this.category);
       if (res.ok) {
         this.attrList = res.data;
         this.$message.success("所有属性获取成功");
@@ -233,16 +251,16 @@ export default {
   components: {
     Category,
   },
-  mounted() {
-    this.$bus.$on("allAttrsData", this.getAttrList);
-    this.$bus.$on("clsAttr", this.clsAttribut);
-  },
+  // mounted() {
+  //   this.$bus.$on("allAttrsData", this.getAttrList);
+  //   this.$bus.$on("clsAttr", this.clsAttribut);
+  // },
 
-  beforeDestroy() {
-    //否则每一次都会绑定一个事件
-    this.$bus.$off("allAttrsData", this.getAttrList);
-    this.$bus.$off("clsAttr", this.clsAttribut);
-  },
+  // beforeDestroy() {
+  //   //否则每一次都会绑定一个事件
+  //   this.$bus.$off("allAttrsData", this.getAttrList);
+  //   this.$bus.$off("clsAttr", this.clsAttribut);
+  // },
 };
 </script>
 
