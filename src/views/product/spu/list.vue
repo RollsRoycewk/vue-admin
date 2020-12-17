@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     // 关闭
-    isShowAddSkuFalse(category3Id) {
+    isShowAddSkuFalse() {
       this.isShowAddSku = false;
       // this.$nextTick(() => {
       //   this.$bus.$emit("allAttrsData", { category3Id });
@@ -53,7 +53,7 @@ export default {
       this.isShowSpu = false;
       this.supData = { ...row };
     },
-    isShowState(category3Id) {
+    isShowState() {
       this.isShowSpu = true;
       // this.$nextTick(() => {
       //   this.$bus.$emit("allAttrsData", { category3Id });

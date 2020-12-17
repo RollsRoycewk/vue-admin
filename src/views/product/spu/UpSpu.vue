@@ -129,9 +129,7 @@
         </el-table>
         <!-- 保存取消按钮 -->
         <el-button type="primary" @click="submitSup('ruleSup')">保存</el-button>
-        <el-button @click="$emit('isShowState', category.category3Id)"
-          >取消</el-button
-        >
+        <el-button @click="$emit('isShowState')">取消</el-button>
       </el-form-item>
     </el-form>
   </el-card>
@@ -250,7 +248,7 @@ export default {
             this.$message.success(
               `SPU数据${this.supEveryData.id ? "修改" : "添加"}成功`
             );
-            this.$emit("isShowState", this.supEveryData.category3Id);
+            this.$emit("isShowState");
           }
         } else {
           this.$message.error("数据效验失败");

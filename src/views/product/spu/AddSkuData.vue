@@ -1,3 +1,4 @@
+
 <template>
   <el-card class="box-card">
     <el-form ref="form" label-width="80px" :model="supEveryData">
@@ -86,10 +87,7 @@
         <!-- 保存取消按钮 -->
         <div class="addSkuData-save">
           <el-button type="primary" disabled>保存</el-button>
-          <el-button
-            @click="$emit('isShowAddSkuFalse', skuDataList.category3Id)"
-            >取消</el-button
-          >
+          <el-button @click="$emit('isShowAddSkuFalse')">取消</el-button>
         </div>
       </el-form-item>
     </el-form>
@@ -97,8 +95,14 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "AddSkuData",
+  computed: {
+    ...mapState({
+      category: (state) => state.category.category,
+    }),
+  },
   data() {
     return {
       text: "",
@@ -135,12 +139,8 @@ export default {
     /* 获取平台属性 */
     async getAttrList() {
       // 后面更新数以后重新刷新用
-      const { category1Id, category2Id, category3Id } = this.supEveryData;
-      const res = await this.$API.attrs.getCategoryAttrsData({
-        category1Id,
-        category2Id,
-        category3Id,
-      });
+      // const { category1Id, category2Id, category3Id } = this.supEveryData;
+      const res = await this.$API.attrs.getCategoryAttrsData(this.category);
       if (res.ok) {
         this.attrList = res.data;
         this.$message.success("所有属性获取成功");
