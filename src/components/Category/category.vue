@@ -55,6 +55,7 @@
 </template>
 
 <script>
+import { mapState, mapActions, mapMutations } from "vuex";
 export default {
   name: "Category",
   props: ["disabled"],
@@ -65,63 +66,76 @@ export default {
         category2Id: "",
         category3Id: "",
       },
-      category1List: [],
-      category2List: [],
-      category3List: [],
+      // category1List: [],
+      // category2List: [],
+      // category3List: [],
     };
   },
+  computed: {
+    ...mapState({
+      category1List: (state) => state.category.category1List,
+      category2List: (state) => state.category.category2List,
+      category3List: (state) => state.category.category3List,
+    }),
+  },
   methods: {
+    ...mapActions(["getCategory1Data", "getCategory2Data", "getCategory3Data"]),
+    ...mapMutations(["SET_CATEGORY_3ID"]),
     // 点击一级目录,获取二级目录
-    async handleSelectChange1(e) {
+    async handleSelectChange1(category1Id) {
       // console.log(e); 获取的是一级目录的id
       /* 点击一级目录,让二级三级目录清空 */
-      this.category2List = [];
-      this.category3List = [];
+      // this.category2List = [];
+      // this.category3List = [];
       this.category.category2Id = "";
       this.category.category3Id = "";
-      this.$bus.$emit("clsAttr");
+      // this.$bus.$emit("clsAttr");
 
-      const res = await this.$API.attrs.getCategory2Data(e);
-      if (res.ok) {
-        this.$message.success("二级分类数据获取成功");
-        this.category2List = res.data;
-      } else {
-        this.$message.error("二级分类数据获取失败");
-      }
+      // const res = await this.$API.attrs.getCategory2Data(e);
+      // if (res.ok) {
+      //   this.$message.success("二级分类数据获取成功");
+      //   this.category2List = res.data;
+      // } else {
+      //   this.$message.error("二级分类数据获取失败");
+      // }
+      this.getCategory2Data(category1Id);
     },
 
     // 点击二级目录,获取三级目录
-    async handleSelectChange2(e) {
+    async handleSelectChange2(category2Id) {
       /* 点击一级目录,让二级三级目录清空 */
-      this.category3List = [];
+      // this.category3List = [];
       this.category.category3Id = "";
-      this.$bus.$emit("clsAttr");
+      // this.$bus.$emit("clsAttr");
 
-      const res = await this.$API.attrs.getCategory3Data(e);
-      if (res.ok) {
-        this.$message.success("三级分类数据获取成功");
-        this.category3List = res.data;
-      } else {
-        this.$message.error("三级分类数据获取失败");
-      }
+      // const res = await this.$API.attrs.getCategory3Data(e);
+      // if (res.ok) {
+      //   this.$message.success("三级分类数据获取成功");
+      //   this.category3List = res.data;
+      // } else {
+      //   this.$message.error("三级分类数据获取失败");
+      // }
+      this.getCategory3Data(category2Id);
     },
     // 点击三级目录,发送请求获取属性,emit子组件给父组件传递参数,自定义事件
     async handleSelectChange3(category3Id) {
-      const category = {
-        ...this.category,
-        category3Id,
-      };
-      this.$bus.$emit("allAttrsData", category);
+      // const category = {
+      //   ...this.category,
+      //   category3Id,
+      // };
+      this.SET_CATEGORY_3ID(category3Id);
+      // this.$bus.$emit("allAttrsData", category);
     },
   },
   async mounted() {
-    const res = await this.$API.attrs.getCategory1Data();
-    if (res.ok) {
-      this.$message.success("一级分类数据获取成功");
-      this.category1List = res.data;
-    } else {
-      this.$message.error("一级分类数据获取失败");
-    }
+    // const res = await this.$API.attrs.getCategory1Data();
+    // if (res.ok) {
+    //   this.$message.success("一级分类数据获取成功");
+    //   this.category1List = res.data;
+    // } else {
+    //   this.$message.error("一级分类数据获取失败");
+    // }
+    this.getCategory1Data();
   },
 };
 </script>
