@@ -129,7 +129,7 @@
         </el-table>
         <!-- 保存取消按钮 -->
         <el-button type="primary" @click="submitSup('ruleSup')">保存</el-button>
-        <el-button @click="$emit('isShowState', supEveryData.category3Id)"
+        <el-button @click="$emit('isShowState', category.category3Id)"
           >取消</el-button
         >
       </el-form-item>
@@ -138,6 +138,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "UpSpu",
   data() {
@@ -401,6 +403,10 @@ export default {
     },
   },
   computed: {
+    ...mapState({
+      category: (state) => state.category.category,
+    }),
+
     // 处理图片格式,因为上传的要求是这样,但是又不能直接修改掉原数据
     upImgFormat() {
       return this.spuImageList.map((img) => {

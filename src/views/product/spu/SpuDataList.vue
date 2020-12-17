@@ -54,6 +54,9 @@
 </template>
 
 <script>
+import { Handler } from "mockjs";
+import { mapState } from "vuex";
+
 export default {
   name: "SpuDataList",
   data() {
@@ -65,12 +68,30 @@ export default {
       // spu所有数据
       spuAllData: [],
       // 三级导航id
-      category: {
-        category1Id: "",
-        category2Id: "",
-        category3Id: "",
-      },
+      // category: {
+      //   category1Id: "",
+      //   category2Id: "",
+      //   category3Id: "",
+      // },
     };
+  },
+  watch: {
+    "category.category3Id": {
+      handler(category3Id) {
+        if (!category3Id) return;
+        this.handleEmitAllattrData();
+      },
+      immediate: true,
+    },
+    // "category.category3Id"() {
+    //   this.handleEmitAllattrData();
+    // },
+    "category.category1Id"() {
+      this.clsAttr();
+    },
+    "category.category2Id"() {
+      this.clsAttr();
+    },
   },
   methods: {
     async getPageSpuData(current, size) {
@@ -101,8 +122,8 @@ export default {
       this.getPageSpuData(this.current, this.size);
     },
     // 自定义全局事件回调
-    handleEmitAllattrData(category) {
-      this.category = category;
+    handleEmitAllattrData() {
+      // this.category = category;
       this.getPageSpuData(this.current, this.size);
     },
     // 清空数据
@@ -114,16 +135,21 @@ export default {
       this.category.category3Id = "";
     },
   },
-  mounted() {
-    this.$bus.$on("allAttrsData", this.handleEmitAllattrData);
-    this.$bus.$on("clsAttr", this.clsAttr);
+  computed: {
+    ...mapState({
+      category: (state) => state.category.category,
+    }),
   },
+  // mounted() {
+  //   this.$bus.$on("allAttrsData", this.handleEmitAllattrData);
+  //   this.$bus.$on("clsAttr", this.clsAttr);
+  // },
 
-  beforeDestroy() {
-    //否则每一次都会绑定一个事件
-    this.$bus.$off("allAttrsData", this.handleEmitAllattrData);
-    this.$bus.$off("clsAttr", this.clsAttr);
-  },
+  // beforeDestroy() {
+  //   //否则每一次都会绑定一个事件
+  //   this.$bus.$off("allAttrsData", this.handleEmitAllattrData);
+  //   this.$bus.$off("clsAttr", this.clsAttr);
+  // },
 };
 
 // category3Id:61

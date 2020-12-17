@@ -41,9 +41,9 @@ export default {
     // 关闭
     isShowAddSkuFalse(category3Id) {
       this.isShowAddSku = false;
-      this.$nextTick(() => {
-        this.$bus.$emit("allAttrsData", { category3Id });
-      });
+      // this.$nextTick(() => {
+      //   this.$bus.$emit("allAttrsData", { category3Id });
+      // });
     },
     isShowAddSkuState(row) {
       this.isShowAddSku = true;
@@ -55,9 +55,9 @@ export default {
     },
     isShowState(category3Id) {
       this.isShowSpu = true;
-      this.$nextTick(() => {
-        this.$bus.$emit("allAttrsData", { category3Id });
-      });
+      // this.$nextTick(() => {
+      //   this.$bus.$emit("allAttrsData", { category3Id });
+      // });
     },
   },
   components: {
