@@ -1,7 +1,12 @@
 
 <template>
   <el-card class="box-card">
-    <el-form label-width="80px" :mode="sku">
+    <el-form
+      label-width="80px"
+      :model="sku"
+      :rules="addsKuRules"
+      ref="addsKuRef"
+    >
       <!-- SPU名称 -->
       <el-form-item label="SPU名称">{{ supEveryData.spuName }} </el-form-item>
       <!-- SKU名称 -->
@@ -47,6 +52,7 @@
             <el-select
               placeholder="请选择"
               v-model="sku.skuAttrValueList[index]"
+              @change="clearRules('skuAttrValueList')"
             >
               <el-option
                 v-for="attrValue in attr.attrValueList"
@@ -116,7 +122,9 @@
         </el-table>
         <!-- 保存取消按钮 -->
         <div class="addSkuData-save">
-          <el-button type="primary" @click="saveSubmit">保存</el-button>
+          <el-button type="primary" @click="saveSubmit('addsKuRef')"
+            >保存</el-button
+          >
           <el-button @click="$emit('isShowAddSkuFalse')">取消</el-button>
         </div>
       </el-form-item>
@@ -144,46 +152,92 @@ export default {
       spuSaleAttr: {},
       spuImageList: [],
       attrList: [],
+      // 效验
+      addsKuRules: {
+        skuName: [
+          { required: true, message: "请输入SKU名称", trigger: "change" },
+        ],
+        price: [
+          { required: true, message: "请输入SKU价格", trigger: "change" },
+        ],
+        weight: [
+          { required: true, message: "请输入SKU重量", trigger: "change" },
+        ],
+        skuDesc: [
+          { required: true, message: "请输入SKU描述", trigger: "change" },
+        ],
+        skuAttrValueList: [
+          { required: true, validator: this.skuAttrValueList },
+        ],
+      },
     };
   },
   methods: {
-    // 提交
-    async saveSubmit() {
-      const { category3Id, id, tmId } = this.supEveryData;
-      const skuSaleAttrValueList = this.sku.skuSaleAttrValueList.map((item) => {
-        return {
-          saleAttrValueId: item,
-          spuId: id,
-        };
-      });
-
-      const skuAttrValueList = this.sku.skuAttrValueList.map((item) => {
-        const [attrId, valueId] = item.split("-");
-        return {
-          attrId,
-          valueId: 0,
-        };
-      });
-
-      let skuDefaultImg = this.sku.skuImageList.find((item) => item.isDefault)
-        .imgUrl;
-      const submitData = {
-        ...this.sku,
-        category3Id,
-        spuId: id,
-        tmId,
-        skuSaleAttrValueList,
-        skuAttrValueList,
-        skuDefaultImg,
-      };
-      const res = await this.$API.sku.reqSaveSkuInfo(submitData);
-      if (res.code === 200) {
-        this.$message.success("SKU上传成功,前台可以看到图片了");
-        this.spuSaleAttr = res.data;
-        // this.baseSaleAttr = res.data;
-      } else {
-        this.$message.error("SKU上传失败");
+    // 移出效验
+    clearRules(prop) {
+      this.$refs.addsKuRef.clearValidate(prop);
+    },
+    // 效验
+    skuAttrValueList(rule, value, callback) {
+      const {
+        attrList,
+        sku: { skuAttrValueList },
+      } = this;
+      if (
+        attrList.length !== skuAttrValueList.length ||
+        attrList.some((val) => !val)
+      ) {
+        callback(new Error("请选择全部的属性"));
+        return;
       }
+      callback();
+    },
+    // 提交
+    async saveSubmit(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          alert("submit!");
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+
+      // const { category3Id, id, tmId } = this.supEveryData;
+      // const skuSaleAttrValueList = this.sku.skuSaleAttrValueList.map((item) => {
+      //   return {
+      //     saleAttrValueId: item,
+      //     spuId: id,
+      //   };
+      // });
+
+      // const skuAttrValueList = this.sku.skuAttrValueList.map((item) => {
+      //   const [attrId, valueId] = item.split("-");
+      //   return {
+      //     attrId,
+      //     valueId: 0,
+      //   };
+      // });
+
+      // let skuDefaultImg = this.sku.skuImageList.find((item) => item.isDefault)
+      //   .imgUrl;
+      // const submitData = {
+      //   ...this.sku,
+      //   category3Id,
+      //   spuId: id,
+      //   tmId,
+      //   skuSaleAttrValueList,
+      //   skuAttrValueList,
+      //   skuDefaultImg,
+      // };
+      // const res = await this.$API.sku.reqSaveSkuInfo(submitData);
+      // if (res.code === 200) {
+      //   this.$message.success("SKU上传成功,前台可以看到图片了");
+      //   this.spuSaleAttr = res.data;
+      //   // this.baseSaleAttr = res.data;
+      // } else {
+      //   this.$message.error("SKU上传失败");
+      // }
     },
     // 设置默认
     setDefault(rowindex) {
@@ -249,6 +303,8 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+.addSkuData-select
+  margin: 5px 0
 >>>.el-input__inner
   text-align: left
 >>>.addSkuData-select
