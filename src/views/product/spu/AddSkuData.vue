@@ -109,12 +109,12 @@
           </el-table-column>
           <el-table-column prop="imgName" label="名称"> </el-table-column>
           <el-table-column prop="address" label="操作" show-overflow-tooltip>
-            <template v-slot="{ row, $index }">
+            <template v-slot="{ row }">
               <el-button
                 type="primary"
                 size="mini"
                 v-if="!row.isDefault"
-                @click="setDefault($index)"
+                @click="setDefault(row.id)"
                 >设为默认</el-button
               >
               <el-tag v-else type="success">默认</el-tag>
@@ -277,11 +277,17 @@ export default {
       // }
     },
     // 设置默认
-    setDefault(rowindex) {
-      this.spuImageList = this.spuImageList.map((img, index) => {
+    setDefault(id) {
+      this.spuImageList = this.spuImageList.map((img) => {
         return {
           ...img,
-          isDefault: rowindex === index ? true : false,
+          isDefault: id === img.id ? true : false,
+        };
+      });
+      this.sku.skuImageList = this.sku.skuImageList.map((img) => {
+        return {
+          ...img,
+          isDefault: id === img.id ? true : false,
         };
       });
     },
