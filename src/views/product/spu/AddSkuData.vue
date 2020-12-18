@@ -75,6 +75,7 @@
             <el-select
               placeholder="请选择"
               v-model="sku.skuSaleAttrValueList[index]"
+              @change="clearRules('skuSaleAttrValueList')"
             >
               <el-option
                 v-for="spuSaleAttrValue in spuSale.spuSaleAttrValueList"
@@ -169,6 +170,12 @@ export default {
         skuAttrValueList: [
           { required: true, validator: this.skuAttrValueList },
         ],
+        skuSaleAttrValueList: [
+          { required: true, validator: this.skuSaleAttrValueList },
+        ],
+        skuImageList: [
+          { required: true, validator: this.skuImageListValueList },
+        ],
       },
     };
   },
@@ -188,6 +195,36 @@ export default {
         attrList.some((val) => !val)
       ) {
         callback(new Error("请选择全部的属性"));
+        return;
+      }
+      callback();
+    },
+    // 效验
+    skuSaleAttrValueList(rule, value, callback) {
+      const {
+        spuSaleAttr,
+        sku: { skuSaleAttrValueList },
+      } = this;
+      if (
+        spuSaleAttr.length !== skuSaleAttrValueList.length ||
+        attrList.some((val) => !val)
+      ) {
+        callback(new Error("请选择全部的销售属性"));
+        return;
+      }
+      callback();
+    },
+    // 效验
+    skuImageListValueList(rule, value, callback) {
+      const {
+        sku: { skuImageList },
+      } = this;
+      if (skuImageList.length === 0) {
+        callback(new Error("请至少选择一张图片"));
+        return;
+      }
+      if (!skuImageList.some((item) => item.isDefault)) {
+        callback(new Error("请设置一张默认图片"));
         return;
       }
       callback();
