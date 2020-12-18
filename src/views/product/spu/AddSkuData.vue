@@ -84,9 +84,11 @@
           tooltip-effect="dark"
           style="width: 100%"
           @selection-change="handleSelectionChange"
+          row-key="id"
         >
           >
-          <el-table-column type="selection" width="55"> </el-table-column>
+          <el-table-column type="selection" width="55" reserve-selection>
+          </el-table-column>
           <el-table-column label="图片" width="120">
             <template slot-scope="scope">
               <img alt="" :src="scope.row.imgUrl" style="width: 100px" />
@@ -94,8 +96,15 @@
           </el-table-column>
           <el-table-column prop="imgName" label="名称"> </el-table-column>
           <el-table-column prop="address" label="操作" show-overflow-tooltip>
-            <template>
-              <el-button type="primary" size="mini">设为默认</el-button>
+            <template v-slot="{ row, $index }">
+              <el-button
+                type="primary"
+                size="mini"
+                v-if="!row.isDefault"
+                @click="setDefault($index)"
+                >设为默认</el-button
+              >
+              <el-tag v-else type="success">默认</el-tag>
             </template>
           </el-table-column>
         </el-table>
@@ -133,10 +142,19 @@ export default {
     };
   },
   methods: {
+    // 设置默认
+    setDefault(rowindex) {
+      this.spuImageList = this.spuImageList.map((img, index) => {
+        return {
+          ...img,
+          isDefault: rowindex === index ? true : false,
+        };
+      });
+    },
     // 手机图片
     handleSelectionChange(skuImageList) {
       // console.log(skuImageList);
-      this.skuImageList = skuImageList;
+      this.sku.skuImageList = skuImageList;
     },
     /* 获取所有销售属性 */
     async getSpuSaleAttrList() {
