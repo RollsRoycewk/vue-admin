@@ -9,5 +9,13 @@ export default {
       url: `${api_name}/list/${page}/${limit}`,
       method: "GET"
     });
+  },
+  /* /admin/product/saveSkuInfo */
+  reqSaveSkuInfo(data) {
+    return request({
+      url: `${api_name}/saveSkuInfo`,
+      method: "POST",
+      data
+    });
   }
 };

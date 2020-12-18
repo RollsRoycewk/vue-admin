@@ -42,15 +42,20 @@
           v-for="(attr, index) in attrList"
           :key="attr.id"
         >
-          <span>{{ attr.attrName }}</span>
-          <el-select placeholder="请选择" v-model="sku.skuAttrValueList[index]">
-            <el-option
-              v-for="attrValue in attr.attrValueList"
-              :key="attrValue.id"
-              :value="`${attr.id}-${attrValue.id}`"
-              :label="attrValue.valueName"
-            ></el-option>
-          </el-select>
+          <el-form-item :label="attr.attrName">
+            <!-- <span>{{ attr.attrName }}</span> -->
+            <el-select
+              placeholder="请选择"
+              v-model="sku.skuAttrValueList[index]"
+            >
+              <el-option
+                v-for="attrValue in attr.attrValueList"
+                :key="attrValue.id"
+                :value="`${attr.id}-${attrValue.id}`"
+                :label="attrValue.valueName"
+              ></el-option>
+            </el-select>
+          </el-form-item>
         </div>
       </el-form-item>
       <!-- 销售属性 -->
@@ -60,18 +65,19 @@
           v-for="(spuSale, index) in spuSaleAttr"
           :key="spuSale.id"
         >
-          <span>{{ spuSale.saleAttrName }}</span>
-          <el-select
-            placeholder="请选择"
-            v-model="sku.skuSaleAttrValueList[index]"
-          >
-            <el-option
-              v-for="spuSaleAttrValue in spuSale.spuSaleAttrValueList"
-              :key="spuSaleAttrValue.id"
-              :value="`${spuSale.id}-${spuSaleAttrValue.id}`"
-              :label="spuSaleAttrValue.saleAttrValueName"
-            ></el-option>
-          </el-select>
+          <el-form-item :label="spuSale.saleAttrName">
+            <el-select
+              placeholder="请选择"
+              v-model="sku.skuSaleAttrValueList[index]"
+            >
+              <el-option
+                v-for="spuSaleAttrValue in spuSale.spuSaleAttrValueList"
+                :key="spuSaleAttrValue.id"
+                :value="`${spuSale.id}-${spuSaleAttrValue.id}`"
+                :label="spuSaleAttrValue.saleAttrValueName"
+              ></el-option>
+            </el-select>
+          </el-form-item>
         </div>
       </el-form-item>
       <!-- 图片列表 -->
