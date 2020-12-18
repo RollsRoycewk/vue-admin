@@ -1,61 +1,74 @@
 
 <template>
   <el-card class="box-card">
-    <el-form ref="form" label-width="80px" :model="supEveryData">
+    <el-form ref="form" label-width="80px" :model="supEveryData" :mode="sku">
       <!-- SPU名称 -->
       <el-form-item label="SPU名称">{{ supEveryData.spuName }} </el-form-item>
       <!-- SKU名称 -->
-      <el-form-item label="SKU名称">
-        <el-input placeholder="SKU名称"></el-input>
+      <el-form-item label="SKU名称" prop="skuName">
+        <el-input placeholder="SKU名称" v-model="sku.skuName"></el-input>
       </el-form-item>
       <!-- SKU价格 -->
       <!-- @change="handleChange" -->
-      <el-form-item label="价格(元)">
+      <el-form-item label="价格(元)" prop="price">
         <el-input-number
           controls-position="right"
           :min="0"
           placeholder="SKU价格"
+          v-model="sku.price"
         ></el-input-number>
       </el-form-item>
       <!-- SKU重量 -->
-      <el-form-item label="重量(千克)">
+      <el-form-item label="重量(千克)" prop="weight">
         <el-input-number
           controls-position="right"
           :min="0"
           placeholder="SKU重量"
+          v-model="sku.weight"
         ></el-input-number>
       </el-form-item>
       <!-- 规则描述 -->
-      <el-form-item label="规则描述">
-        <el-input type="textarea" placeholder="SKU规则描述"></el-input>
+      <el-form-item label="规则描述" prop="skuDesc">
+        <el-input
+          type="textarea"
+          placeholder="SKU规则描述"
+          v-model="sku.skuDesc"
+        ></el-input>
       </el-form-item>
       <!-- 平台属性 -->
-      <el-form-item label="平台属性">
-        <div class="addSkuData-select" v-for="attr in attrList" :key="attr.id">
+      <el-form-item label="平台属性" prop="skuAttrValueList">
+        <div
+          class="addSkuData-select"
+          v-for="(attr, index) in attrList"
+          :key="attr.id"
+        >
           <span>{{ attr.attrName }}</span>
-          <el-select placeholder="请选择" v-model="text">
+          <el-select placeholder="请选择" v-model="sku.skuAttrValueList[index]">
             <el-option
               v-for="attrValue in attr.attrValueList"
               :key="attrValue.id"
-              :value="attrValue.id"
+              :value="`${attr.id}-${attrValue.id}`"
               :label="attrValue.valueName"
             ></el-option>
           </el-select>
         </div>
       </el-form-item>
       <!-- 销售属性 -->
-      <el-form-item label="销售属性">
+      <el-form-item label="销售属性" prop="skuSaleAttrValueList">
         <div
           class="addSkuData-select"
-          v-for="spuSale in spuSaleAttr"
+          v-for="(spuSale, index) in spuSaleAttr"
           :key="spuSale.id"
         >
           <span>{{ spuSale.saleAttrName }}</span>
-          <el-select placeholder="请选择" v-model="text">
+          <el-select
+            placeholder="请选择"
+            v-model="sku.skuSaleAttrValueList[index]"
+          >
             <el-option
               v-for="spuSaleAttrValue in spuSale.spuSaleAttrValueList"
               :key="spuSaleAttrValue.id"
-              :value="spuSaleAttrValue.id"
+              :value="`${spuSale.id}-${spuSaleAttrValue.id}`"
               :label="spuSaleAttrValue.saleAttrValueName"
             ></el-option>
           </el-select>
@@ -63,14 +76,16 @@
       </el-form-item>
       <!-- 图片列表 -->
       <!-- @selection-change="handleSelectionChange" -->
-      <el-form-item label="图片列表">
+      <el-form-item label="图片列表" prop="skuImageList">
         <el-table
           border
           ref="multipleTable"
           :data="spuImageList"
           tooltip-effect="dark"
           style="width: 100%"
+          @selection-change="handleSelectionChange"
         >
+          >
           <el-table-column type="selection" width="55"> </el-table-column>
           <el-table-column label="图片" width="120">
             <template slot-scope="scope">
@@ -106,6 +121,11 @@ export default {
   data() {
     return {
       text: "",
+      sku: {
+        skuAttrValueList: [],
+        skuSaleAttrValueList: [],
+        skuImageList: [],
+      },
       supEveryData: this.skuDataList,
       spuSaleAttr: {},
       spuImageList: [],
@@ -113,6 +133,11 @@ export default {
     };
   },
   methods: {
+    // 手机图片
+    handleSelectionChange(skuImageList) {
+      // console.log(skuImageList);
+      this.skuImageList = skuImageList;
+    },
     /* 获取所有销售属性 */
     async getSpuSaleAttrList() {
       const { id } = this.supEveryData;
