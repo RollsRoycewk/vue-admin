@@ -1,7 +1,9 @@
 import { Message } from "element-ui";
 
 // 引入所有,并且重命名为API
-import * as API from "@/api";
+// import * as API from "@/api";
+
+import API from "@/api";
 
 export default {
   state: {

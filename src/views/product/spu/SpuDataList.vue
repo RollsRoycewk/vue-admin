@@ -140,6 +140,7 @@ export default {
       category: (state) => state.category.category,
     }),
   },
+
   // mounted() {
   //   this.$bus.$on("allAttrsData", this.handleEmitAllattrData);
   //   this.$bus.$on("clsAttr", this.clsAttr);
