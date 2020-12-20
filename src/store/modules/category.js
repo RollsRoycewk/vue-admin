@@ -72,6 +72,12 @@ export default {
     /* 三级ID设置 */
     SET_CATEGORY_3ID(state, category3Id) {
       state.category.category3Id = category3Id;
+    },
+    /* 清空id */
+    RESET_CAREGORY_ID(state) {
+      state.category.category1Id = "";
+      state.category.category2Id = "";
+      state.category.category3Id = "";
     }
   },
   getters: {}

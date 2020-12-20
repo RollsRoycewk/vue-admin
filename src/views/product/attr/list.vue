@@ -255,7 +255,10 @@ export default {
   //   this.$bus.$on("allAttrsData", this.getAttrList);
   //   this.$bus.$on("clsAttr", this.clsAttribut);
   // },
-
+  // 解决页面跳转的时候还会发送id数据
+  beforeDestroy() {
+    this.$store.commit("RESET_CAREGORY_ID");
+  },
   // beforeDestroy() {
   //   //否则每一次都会绑定一个事件
   //   this.$bus.$off("allAttrsData", this.getAttrList);

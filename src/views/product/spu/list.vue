@@ -66,5 +66,9 @@ export default {
     UpSpu,
     AddSkuData,
   },
+  // 解决页面跳转的时候还会发送id数据
+  beforeDestroy() {
+    this.$store.commit("RESET_CAREGORY_ID");
+  },
 };
 </script>
